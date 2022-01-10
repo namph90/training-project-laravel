@@ -3,7 +3,10 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Pagination\Paginator;
+use App\Repositories\Employee\EmployeeRepository;
+use App\Repositories\Employee\EmployeeRepositoryInterface;
+use App\Repositories\Team\TeamRepository;
+use App\Repositories\Team\TeamRepositoryInterface;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -14,7 +17,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->bind(EmployeeRepositoryInterface::class, EmployeeRepository::class);
+        $this->app->bind(TeamRepositoryInterface::class, TeamRepository::class);
     }
 
     /**
@@ -24,6 +28,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Paginator::useBootstrap();
+        //
     }
 }
