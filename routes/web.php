@@ -30,8 +30,8 @@ Route::group(['prefix' => 'management', "middleware" => "checklogin"], function 
 
     Route::group(['prefix' => 'team'], function () {
         Route::get('search', [TeamController::class, 'index'])->name('team.search');
-        Route::get('create', [TeamController::class, 'create'])->name('team.create');
-        Route::post('create', [TeamController::class, 'store'])->name('team.store');
-        Route::post('confirm', [TeamController::class, 'confirm'])->name('team.confirm');
+        Route::post('create_confirm', [TeamController::class, 'createConfirm'])->name('team.create_confirm');
+        Route::post('edit_confirm/{id}', [TeamController::class, 'editConfirm'])->name('team.edit_confirm');
     });
+    Route::resource('team', TeamController::class);
 });

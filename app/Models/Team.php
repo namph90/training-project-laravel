@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Scopes\AncientScope;
 
 class Team extends Model
 {
@@ -14,8 +15,21 @@ class Team extends Model
         'upd_datetime',
     ];
 
-    public function scopeDel_flag($query)
+    protected static function booted()
     {
-        return $query->where('del_flag', 0);
+        static::addGlobalScope(new AncientScope());
+//        static::addGlobalScope('ancient', function ($builder) {
+//            return $builder->where('del_flag', '=', 0);
+//        });
+    }
+
+//    public function scopeActive($query)
+//    {
+//        return $query->where('ins_id', 1);
+//    }
+
+    public function employees()
+    {
+        return $this->hasMany(Employee::class);
     }
 }

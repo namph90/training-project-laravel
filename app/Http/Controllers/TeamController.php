@@ -4,9 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Teams\CreateRequest;
 use App\Repositories\Team\TeamRepositoryInterface;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
-use App\Models\Team;
 
 class TeamController extends Controller
 {
@@ -23,7 +21,12 @@ class TeamController extends Controller
 
     public function index()
     {
-        return view('teams.search');
+//        $a = $this->teamRepo->getAll();
+//        $b = $this->teamRepo->getDelete();
+//        $c = $this->teamRepo->getTest();
+//        //$data = Team::getGlobalScope('ancient')->get();
+        $data = $this->teamRepo->search();
+        return view('teams.search', ['data' => $data]);
     }
 
     public function create()
@@ -31,22 +34,39 @@ class TeamController extends Controller
         return view('teams.create');
     }
 
-    public function confirm(CreateRequest $request)
+    public function createConfirm(CreateRequest $request)
     {
         $data = request()->all();
         Session::flash('value', $data['name']);
-        return view('teams.confirm', ['data'=>$data]);
+        return view('teams.create_confirm', ['data' => $data]);
     }
 
     public function store()
     {
         $data = request()->all();
         $result = $this->teamRepo->create($data);
-        if($result){
-            return redirect()->route('team.search')->with('create_success','');
+        if ($result) {
+            return redirect()->route('team.search')->with('create_success', '');
         } else {
             return view('elements.error');
         }
+    }
 
+    public function edit($id)
+    {
+        $team = $this->teamRepo->find($id);
+        return view('teams.edit', ['team'=>$team]);
+    }
+
+    public function editConfirm(CreateRequest $request, $team)
+    {
+        $data = request()->all();
+        Session::flash('value_edit', $data['name']);
+        return view('teams.edit_confirm', ['data' => $data, 'id'=>$team]);
+    }
+
+    public function update(CreateRequest $request, $id)
+    {
+        //
     }
 }

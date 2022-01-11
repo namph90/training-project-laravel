@@ -30,7 +30,7 @@ abstract class BaseRepository implements RepositoryInterface
 
     public function getAll()
     {
-        return $this->model->all()->del_flag();
+        return $this->model->all();
     }
 
     public function find($id)

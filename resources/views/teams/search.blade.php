@@ -20,7 +20,8 @@
                         <div class="col-md-2"></div>
                         <div class="col-md-8">
                             </br></br>
-                            <a href=""><input style="float: left;" type="button" value="Reset" class="btn btn-danger"></a>
+                            <a href=""><input style="float: left;" type="button" value="Reset"
+                                              class="btn btn-danger"></a>
                             <input style="float: right;" type="submit" value="Search" class="btn btn-primary">
                         </div>
                     </div>
@@ -29,60 +30,61 @@
         </div>
         <br><br>
         <div class="panel-body">
-            <table class="table table-bordered table-hover thead-light" style="text-align: center;">
-                <tr>
-                    <th style="width: 50px;">
-                        <a style="text-decoration: none; color:#34373a ;"
-                           href="">
-                            ID <i
-                                class="fa fa-sort"
-                                aria-hidden="true"></i></a></th>
-                    <th style="width:300px;"><a style="text-decoration: none; color:#34373a ;"
-                                                href="#">Name
-                            <i
-                                class="fa fa-sort"
-                                aria-hidden="true"></i></a></th>
-                    <th style="width:170px;">Action</th>
-                </tr>
-                <tr>
-                    <td style="vertical-align: middle;">1</td>
-                    <td style="text-align: left; vertical-align: middle;">dsf</td>
-                    <td style="text-align:center; vertical-align: middle;">
-                        <a href="#">
-                            <button type="button" class="btn btn-outline-info">Edit</button>
-                        </a>&nbsp;&nbsp;&nbsp;
-                        <a href="#"
-                           onclick="return window.confirm('Are you sure?');">
-                            <button type="button" class="btn btn-outline-danger">Danger</button>
-                        </a>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="6">No results found!</td>
-                </tr>
-            </table>
-            <table class="table table-bordered table-hover thead-light" style="text-align: center;">
-                <tr>
-                    <th style="width: 50px;">
-                        <a style="text-decoration: none; color:#34373a ;"
-                           href="">
-                            ID <i
-                                class="fa fa-sort"
-                                aria-hidden="true"></i></a></th>
-                    <th style="width:300px;"><a style="text-decoration: none; color:#34373a ;"
-                                                href="#">Name</a></th>
-                    <th style="width:170px;">Action</th>
-                </tr>
-                <tr>
-                    <td colspan="3">No results found!</td>
-                </tr>
-            </table>
-            <style type="text/css">
-                .pagination {
-                    padding: 0px;
-                    margin: 0px;
-                }
-            </style>
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-end">
+                    {{$data->appends(request()->all())->links()}}
+                </ul>
+            </nav>
+            @if($data->count() != 0)
+                <table class="table table-bordered table-hover thead-light" style="text-align: center;">
+                    <tr>
+                        <th style="width: 50px;">
+                            <a style="text-decoration: none; color:#34373a ;"
+                               href="">
+                                ID <i
+                                    class="fa fa-sort"
+                                    aria-hidden="true"></i></a></th>
+                        <th style="width:300px;"><a style="text-decoration: none; color:#34373a ;"
+                                                    href="#">Name
+                                <i
+                                    class="fa fa-sort"
+                                    aria-hidden="true"></i></a></th>
+                        <th style="width:170px;">Action</th>
+                    </tr>
+                    @foreach($data as $item)
+                        <tr>
+                            <td style="vertical-align: middle;">{{$item->id}}</td>
+                            <td style="text-align: left; vertical-align: middle;">{{$item->name}}</td>
+                            <td style="text-align:center; vertical-align: middle;">
+                                <a href="{{route('team.edit', ['team'=>$item->id])}}">
+                                    <button type="button" class="btn btn-outline-info">Edit</button>
+                                </a>&nbsp;&nbsp;&nbsp;
+                                <a href="#"
+                                   onclick="return window.confirm('Are you sure?');">
+                                    <button type="button" class="btn btn-outline-danger">Danger</button>
+                                </a>
+                            </td>
+                        </tr>
+                    @endforeach
+                </table>
+            @else
+                <table class="table table-bordered table-hover thead-light" style="text-align: center;">
+                    <tr>
+                        <th style="width: 50px;">
+                            <a style="text-decoration: none; color:#34373a ;"
+                               href="">
+                                ID <i
+                                    class="fa fa-sort"
+                                    aria-hidden="true"></i></a></th>
+                        <th style="width:300px;"><a style="text-decoration: none; color:#34373a ;"
+                                                    href="#">Name</a></th>
+                        <th style="width:170px;">Action</th>
+                    </tr>
+                    <tr>
+                        <td colspan="3">No results found!</td>
+                    </tr>
+                </table>
+            @endif
         </div>
     </div>
 @endsection

@@ -40,8 +40,9 @@ class Employee extends Authenticatable
     {
         $this->attributes['password'] = bcrypt($password);
     }
-    public function scopeDel_flag($query)
+
+    public function teams()
     {
-        return $query->where('del_flag', 0);
+        return $this->belongsTo(Team::class);
     }
 }

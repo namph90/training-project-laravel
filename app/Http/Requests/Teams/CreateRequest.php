@@ -22,9 +22,9 @@ class CreateRequest extends FormRequest
      * @return array
      */
     public function rules()
-    {
+    {//unique:teams
         return [
-            'name' => 'bail|required|unique:teams|max:128',
+            'name' => 'bail|required|max:128',
         ];
     }
 }
