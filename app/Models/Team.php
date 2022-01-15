@@ -5,28 +5,32 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Scopes\AncientScope;
+use Kyslik\ColumnSortable\Sortable;
 
 class Team extends Model
 {
-    use HasFactory;
+    use HasFactory, Sortable;
     protected $fillable = [
         'name',
         'ins_id',
         'upd_datetime',
+        'upd_id',
+        'del_flag',
+        'ins_datetime',
     ];
+
+    public $timestamps = false;
+    public $sortable = ['id', 'name'];
 
     protected static function booted()
     {
         static::addGlobalScope(new AncientScope());
-//        static::addGlobalScope('ancient', function ($builder) {
-//            return $builder->where('del_flag', '=', 0);
-//        });
     }
 
-//    public function scopeActive($query)
-//    {
-//        return $query->where('ins_id', 1);
-//    }
+    public function scopeSearch_name($query, $searchName)
+    {
+        return $query->where('name','like', '%'.$searchName.'%');
+    }
 
     public function employees()
     {

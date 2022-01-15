@@ -12,8 +12,18 @@ class EmployeeRepository extends BaseRepository implements EmployeeRepositoryInt
         return \App\Models\Employee::class;
     }
 
-    public function getEmployee()
+    public function search()
     {
-        return $this->model->select('first_name', 'email', 'id')->get();
+        $resul = $this->model->sortable(['id' => 'desc']);
+        if(request()->get('name')) {
+            $resul->search_name(request()->get('name'));
+        }
+        if(request()->get('email')) {
+            $resul->search_email(request()->get('email'));
+        }
+        if(request()->get('team')) {
+            $resul->search_team(request()->get('team'));
+        }
+        return $resul->paginate(5);
     }
 }

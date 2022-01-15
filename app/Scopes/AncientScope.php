@@ -16,6 +16,6 @@ class AncientScope implements Scope
      */
     public function apply(Builder $builder, Model $model)
     {
-        $builder->where('del_flag', '=', 0);
+        $builder->where('del_flag', '=', config('const.active'));
     }
 }

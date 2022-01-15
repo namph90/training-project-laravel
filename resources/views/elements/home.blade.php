@@ -27,8 +27,8 @@
                 Employee management
             </a>
             <div class="dropdown-menu">
-                <a class="dropdown-item" href="">Search</a>
-                <a class="dropdown-item" href="">Create</a>
+                <a class="dropdown-item" href="{{route('employee.search')}}">Search</a>
+                <a class="dropdown-item" href="{{route('employee.create')}}">Create</a>
             </div>
         </li>
 
@@ -44,6 +44,11 @@
 </div>
 
 </body>
+<footer class="page-footer font-small blue pt-4" style="margin-top: 50px">
+    <div class="footer-copyright text-center py-3">© 2022 Copyright:
+        <a href="#"> nam.com</a>
+    </div>
+</footer>
 </html>
 
 

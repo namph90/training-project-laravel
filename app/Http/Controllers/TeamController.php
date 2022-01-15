@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Teams\CreateRequest;
+use App\Models\Team;
 use App\Repositories\Team\TeamRepositoryInterface;
 use Illuminate\Support\Facades\Session;
 
@@ -19,12 +20,15 @@ class TeamController extends Controller
         $this->teamRepo = $teamRepo;
     }
 
-    public function index()
+    public function show()
     {
 //        $a = $this->teamRepo->getAll();
 //        $b = $this->teamRepo->getDelete();
 //        $c = $this->teamRepo->getTest();
 //        //$data = Team::getGlobalScope('ancient')->get();
+        //$a = request()->get('searchName');
+//        $team = Team::sortable()->paginate(2);
+//        dd($team);
         $data = $this->teamRepo->search();
         return view('teams.search', ['data' => $data]);
     }
@@ -46,7 +50,7 @@ class TeamController extends Controller
         $data = request()->all();
         $result = $this->teamRepo->create($data);
         if ($result) {
-            return redirect()->route('team.search')->with('create_success', '');
+            return redirect()->route('team.search')->with('success', 'Create Successfull!');
         } else {
             return view('elements.error');
         }
@@ -58,15 +62,31 @@ class TeamController extends Controller
         return view('teams.edit', ['team'=>$team]);
     }
 
-    public function editConfirm(CreateRequest $request, $team)
+    public function editConfirm(CreateRequest $request, $id)
     {
         $data = request()->all();
         Session::flash('value_edit', $data['name']);
-        return view('teams.edit_confirm', ['data' => $data, 'id'=>$team]);
+        return view('teams.edit_confirm', ['data' => $data, 'id'=>$id]);
     }
 
-    public function update(CreateRequest $request, $id)
+    public function update($id)
     {
-        //
+        $data = request()->all();
+        $result =  $this->teamRepo->update($id, $data);
+        if ($result) {
+            return redirect()->route('team.search')->with('success', 'Update Successfull!');
+        } else {
+            return view('elements.error');
+        }
+    }
+
+    public function destroy($id)
+    {
+        $result = $this->teamRepo->delete($id);
+        if ($result) {
+            return redirect()->route('team.search')->with('success', 'Delete Successfull!');
+        } else {
+            return view('elements.error');
+        }
     }
 }

@@ -1,8 +1,8 @@
 @extends("elements.home")
 @section('content')
-    @if (Session::has('create_success'))
+    @if (Session::has('success'))
         <div class="alert alert-success" style="text-align: center;">
-            <strong>{{ trans('messages.create_success') }}</strong>
+            <strong>{{ session()->get('success') }}</strong>
         </div>
     @endif
     <div class="panel panel-primary">
@@ -13,7 +13,7 @@
                         <div class="col-md-2">Name</div>
                         <div class="col-md-10">
                             <input style="width: 50%" type="text" class="form-control searchName" name="searchName"
-                                   value="">
+                                   value="{{request()->has('searchName') ? request('searchName') : ""}}">
                         </div>
                     </div>
                     <div class="row" style="margin-top:15px;">
@@ -39,29 +39,22 @@
                 <table class="table table-bordered table-hover thead-light" style="text-align: center;">
                     <tr>
                         <th style="width: 50px;">
-                            <a style="text-decoration: none; color:#34373a ;"
-                               href="">
-                                ID <i
-                                    class="fa fa-sort"
-                                    aria-hidden="true"></i></a></th>
-                        <th style="width:300px;"><a style="text-decoration: none; color:#34373a ;"
-                                                    href="#">Name
-                                <i
-                                    class="fa fa-sort"
-                                    aria-hidden="true"></i></a></th>
-                        <th style="width:170px;">Action</th>
+                                @sortablelink('id')</th>
+                        <th style="width:300px;">@sortablelink('name')
+                               </th>
+                        <th style="width:100px;">Action</th>
                     </tr>
                     @foreach($data as $item)
                         <tr>
                             <td style="vertical-align: middle;">{{$item->id}}</td>
                             <td style="text-align: left; vertical-align: middle;">{{$item->name}}</td>
                             <td style="text-align:center; vertical-align: middle;">
-                                <a href="{{route('team.edit', ['team'=>$item->id])}}">
+                                <a href="{{route('team.edit', ['id'=>$item->id])}}">
                                     <button type="button" class="btn btn-outline-info">Edit</button>
                                 </a>&nbsp;&nbsp;&nbsp;
-                                <a href="#"
+                                <a href="{{route('team.destroy', ['id'=>$item->id])}}"
                                    onclick="return window.confirm('Are you sure?');">
-                                    <button type="button" class="btn btn-outline-danger">Danger</button>
+                                    <button type="button" class="btn btn-outline-danger">Delete</button>
                                 </a>
                             </td>
                         </tr>
@@ -73,9 +66,7 @@
                         <th style="width: 50px;">
                             <a style="text-decoration: none; color:#34373a ;"
                                href="">
-                                ID <i
-                                    class="fa fa-sort"
-                                    aria-hidden="true"></i></a></th>
+                                ID</th>
                         <th style="width:300px;"><a style="text-decoration: none; color:#34373a ;"
                                                     href="#">Name</a></th>
                         <th style="width:170px;">Action</th>

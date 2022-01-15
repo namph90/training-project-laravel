@@ -14,13 +14,13 @@ class CreateTeamsTable extends Migration
     public function up()
     {
         Schema::create('teams', function (Blueprint $table) {
-            $table->increments('id');
+            $table->increments('id',11);
             $table->string('name', 128);
             $table->char('del_flag', 1)->default('0');
             $table->integer('ins_id')->length(11);
             $table->integer('upd_id')->length(11)->nullable();
-            $table->timestamp('ins_datetime');
-            $table->timestamp('upd_datetime')->nullable();
+            $table->dateTime('ins_datetime');
+            $table->dateTime('upd_datetime')->nullable();
         });
     }
 

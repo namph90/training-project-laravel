@@ -14,13 +14,13 @@ class CreateEmployeesTable extends Migration
     public function up()
     {
         Schema::create('employees', function (Blueprint $table) {
-            $table->increments('id');
+            $table->increments('id',11);
             $table->integer('team_id')->length(11);
-            $table->integer('group_id')->length(11);
             $table->string('email', 128);
+            $table->string('password', 64);
             $table->string('first_name', 128);
             $table->string('last_name', 128);
-            $table->char('gneder', 1);
+            $table->char('gerder', 1);
             $table->date('birthday');
             $table->string('address', 256);
             $table->string('avatar', 128);
@@ -31,8 +31,8 @@ class CreateEmployeesTable extends Migration
             $table->char('del_flag', 1)->default('0');
             $table->integer('ins_id')->length(11);
             $table->integer('upd_id')->length(11)->nullable();
-            $table->timestamp('ins_datetime');
-            $table->timestamp('upd_datetime')->nullable();
+            $table->dateTime('ins_datetime');
+            $table->dateTime('upd_datetime')->nullable();
         });
     }
 

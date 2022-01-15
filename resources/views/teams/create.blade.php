@@ -14,7 +14,7 @@
                                 @csrf
                                 <div class="form-horizontal" style="border: 1px solid black; padding:50px 100px 100px;">
                                     <div class="row" style="margin-top:15px;">
-                                        <div class="col-md-2">Name</div>
+                                        <div class="col-md-2">Name *</div>
                                         <div class="col-md-5">
                                             <input type="text" class="form-control email" name="name"
                                                    value="{{session()->has('value') ? session('value') : old('name')}}">
