@@ -14,7 +14,8 @@
                         <div class="col-md-10">
                             <select class="form-control col-md-2" id="sel1" name="team">
                                 @foreach($teams as $item)
-                                    <option value="{{$item->id}}" {{request()->has('team')&& request('team')==$item->id ? "selected" : ""}}>{{$item->name}}</option>
+                                    <option
+                                        value="{{$item->id}}" {{request()->has('team')&& request('team')==$item->id ? "selected" : ""}}>{{$item->name}}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -35,8 +36,9 @@
                         <div class="col-md-2"></div>
                         <div class="col-md-8">
                             </br></br>
-                            <a href="{{route('employee.search')}}"><input style="float: left;" type="button" value="Reset"
-                                              class="btn btn-danger"></a>
+                            <a href="{{route('employee.search')}}"><input style="float: left;" type="button"
+                                                                          value="Reset"
+                                                                          class="btn btn-danger"></a>
                             <input style="float: right;" type="submit" value="Search" class="btn btn-primary">
                         </div>
                     </div>
@@ -46,6 +48,11 @@
         <br><br>
         <div class="panel-body">
             <nav aria-label="Page navigation example">
+                <ul style="float:right;"><a class="btn btn-primary"
+                                             href="{{route('employee.export')}}">
+                        Export CSV
+                    </a><br>
+                </ul>
                 <ul class="pagination justify-content-end">
                     {{$data->appends(request()->all())->links()}}
                 </ul>
@@ -79,10 +86,36 @@
                                 <a href="{{route('employee.edit', ['id'=>$item->id])}}">
                                     <button type="button" class="btn btn-outline-info">Edit</button>
                                 </a>&nbsp;&nbsp;&nbsp;
-                                <a href="{{route('employee.destroy', ['id'=>$item->id])}}"
-                                   onclick="return window.confirm('Are you sure?');">
-                                    <button type="button" class="btn btn-outline-danger">Delete</button>
-                                </a>
+                                <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog"
+                                     aria-labelledby="myModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title" id="myModalLabel">Confirm Delete</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Do you want to delete?</p>
+                                                <p class="debug-url"></p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">
+                                                    Cancel
+                                                </button>
+                                                <a class="btn btn-danger btn-ok">Delete</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="btn btn-outline-danger"
+                                        data-href="{{route('employee.destroy', ['id'=>$item->id])}}" data-toggle="modal"
+                                        data-target="#confirm-delete">
+                                    Delete
+                                </button>
+                                <script>
+                                    $('#confirm-delete').on('show.bs.modal', function (e) {
+                                        $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+                                    });
+                                </script>
                             </td>
                         </tr>
                     @endforeach

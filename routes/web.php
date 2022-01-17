@@ -16,9 +16,13 @@ use Illuminate\Support\Facades\Auth;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+//
 Route::get('/', function () {
-    return view('welcome');
+    if(Auth::check()){
+        return view('elements.home');
+    } else {
+        return view("login");
+    }
 });
 Route::get('login', function () {
     if(Auth::check()){
@@ -53,5 +57,6 @@ Route::group(['prefix' => 'management', "middleware" => "checklogin"], function 
         Route::post('edit_confirm/{id}', [EmployeeController::class, 'editConfirm'])->name('employee.edit_confirm');
         Route::post('edit/{id}', [EmployeeController::class, 'update'])->name('employee.update');
         Route::get('delete/{id}', [EmployeeController::class, 'destroy'])->name('employee.destroy');
+        Route::get('export', [EmployeeController::class, 'export'])->name('employee.export');
     });
 });

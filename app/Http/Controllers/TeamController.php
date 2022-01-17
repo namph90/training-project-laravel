@@ -6,6 +6,7 @@ use App\Http\Requests\Teams\CreateRequest;
 use App\Models\Team;
 use App\Repositories\Team\TeamRepositoryInterface;
 use Illuminate\Support\Facades\Session;
+use App\Http\Controllers\SendEmailController;
 
 class TeamController extends Controller
 {
@@ -14,6 +15,7 @@ class TeamController extends Controller
     /**
      * EmployeeController constructor.
      * @param TeamRepositoryInterface $teamRepo
+     * @param \App\Http\Controllers\SendEmailController $sendEmail
      */
     public function __construct(TeamRepositoryInterface $teamRepo)
     {

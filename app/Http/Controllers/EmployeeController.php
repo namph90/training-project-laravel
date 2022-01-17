@@ -10,27 +10,33 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Request;
+use App\Exports\EmployeesExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class EmployeeController extends Controller
 {
     protected $employeeRepo;
     protected $teamRepo;
+    protected $sendEmail;
 
     /**
      * EmployeeController constructor.
      * @param EmployeeRepositoryInterface $employeeRepo
      * @param TeamRepositoryInterface $teamRepo
+     * @param SendEmailController $sendEmail
      */
-    public function __construct(EmployeeRepositoryInterface $employeeRepo, TeamRepositoryInterface $teamRepo)
+    public function __construct(EmployeeRepositoryInterface $employeeRepo, TeamRepositoryInterface $teamRepo , SendEmailController $sendEmail)
     {
         $this->employeeRepo = $employeeRepo;
         $this->teamRepo = $teamRepo;
+        $this->sendEmail = $sendEmail;
     }
 
     public function show()
     {
         $teams = $this->teamRepo->getAll();
         $data = $this->employeeRepo->search();
+        session()->put('exportCSV', $data);
         return view('employees.search', ['data' => $data, 'teams' => $teams]);
     }
 
@@ -61,6 +67,7 @@ class EmployeeController extends Controller
             Storage::move('public/tmp/' . $data['avatar'], 'public/uploads/' . $id . '/' . $data['avatar']);
             Storage::deleteDirectory('public/tmp', 'public/uploads');
             session()->forget('check_avatar');
+            $this->sendEmail->send($result);
             return redirect()->route('employee.search')->with('success', 'Create Successfull!');
         } else {
             return view('elements.error');
@@ -96,6 +103,11 @@ class EmployeeController extends Controller
                 Storage::move('public/tmp/' . $data['avatar'], 'public/uploads/' . $id . '/' . $data['avatar']);
                 Storage::deleteDirectory('public/tmp', 'public/uploads');
             }
+            if(session('old_data')->email != $data['email']){
+                $dataSendEmail = $this->employeeRepo->find($id);
+                $this->sendEmail->send($dataSendEmail);
+            }
+
             session()->forget('data_confirm_edit');
             return redirect()->route('employee.search')->with('success', 'Update Successfull!');
         } else {
@@ -107,6 +119,7 @@ class EmployeeController extends Controller
     {
         $result = $this->employeeRepo->delete($id);
         if ($result) {
+            Storage::deleteDirectory('public/uploads/' . $id);
             return redirect()->route('employee.search')->with('success', 'Delete Successfull!');
         } else {
             return view('elements.error');
@@ -116,5 +129,17 @@ class EmployeeController extends Controller
     public function home()
     {
         return view('elements.home');
+    }
+    public function export()
+    {
+        foreach (session('exportCSV') as $key => $employee) {
+            $employees[$key] = [
+                'id' => $employee->id,
+                'team' => $employee->team->name,
+                'name' => $employee->name,
+                'email' => $employee->email,
+            ];
+        }
+        return Excel::download(new EmployeesExport($employees), 'fileEmployee.csv');
     }
 }

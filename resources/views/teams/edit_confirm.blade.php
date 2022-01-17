@@ -32,7 +32,38 @@
                                         <div class="col-md-2"></div>
                                         <div class="col-md-8">
                                             <a href="{{route('team.edit', ['id'=>$id])}}"><input style="float: left;" type="button" value="Back" class="btn btn-danger"></a>
-                                            <input onclick="return confirm('Are you sure ?')" style="float: right;" type="submit" value="Save" class="btn btn-primary">
+
+                                            <input type="button" value="Save" style="float:right;"
+                                                   class="btn btn-primary" data-toggle="modal"
+                                                   data-target="#confirm-delete">
+
+                                            <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog"
+                                                 aria-labelledby="myModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title" id="myModalLabel">Confirm Edit</h4>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <p>Do you want to edit team?</p>
+                                                            <p class="debug-url"></p>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-default"
+                                                                    data-dismiss="modal">
+                                                                Cancel
+                                                            </button>
+                                                            <input style="float: right;" value="Save"
+                                                                   class="btn btn-primary btn-ok">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <script>
+                                                $('#confirm-delete').on('show.bs.modal', function (e) {
+                                                    $(this).find('.btn-ok').attr('type', 'submit');
+                                                });
+                                            </script>
                                         </div>
                                     </div>
                                 </form>

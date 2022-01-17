@@ -24,6 +24,6 @@ class EmployeeRepository extends BaseRepository implements EmployeeRepositoryInt
         if(request()->get('team')) {
             $resul->search_team(request()->get('team'));
         }
-        return $resul->paginate(5);
+        return $resul->paginate(10);
     }
 }
