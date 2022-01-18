@@ -44,7 +44,7 @@ class CreateRequest extends FormRequest
             session()->put('tmp_url', request()->file('avatar')->getPathname());
 
             $name = request()->file('avatar')->getClientOriginalName();
-            Storage::putFileAs('public/tmp', request()->file('avatar'), $name);
+            Storage::putFileAs(config('const.TEMP_DIR'), request()->file('avatar'), $name);
             $data = ['src_img' => "storage/tmp/$name", 'avatar' => $name];
 
             session()->put('img_avatar', $data);

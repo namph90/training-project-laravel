@@ -2,14 +2,12 @@
 
 namespace App\Exports;
 
-use App\Models\Employee;
-use App\Repositories\Employee\EmployeeRepository;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
-use Illuminate\Support\Arr;
+use Maatwebsite\Excel\Concerns\WithColumnWidths;
 
-class EmployeesExport implements FromCollection, WithHeadings
+class EmployeesExport implements FromCollection, WithHeadings, WithColumnWidths
 {
 
     protected $data;
@@ -29,11 +27,22 @@ class EmployeesExport implements FromCollection, WithHeadings
         ];
     }
 
+    public function columnWidths(): array
+    {
+        return [
+            'A' => 55,
+            'B' => 70,
+            'C' => 200,
+            'D' => 200,
+        ];
+    }
+
     /**
-    * @return Collection
-    */
+     * @return Collection
+     */
     public function collection()
     {
         return collect($this->data);
     }
+
 }

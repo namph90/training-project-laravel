@@ -40,8 +40,16 @@
                                             <div class="col-md-9">
                                                 <select class="form-control col-md-3" id="sel1" name="team_id">
                                                     @foreach($teams as $item)
-                                                        <option
-                                                            value="{{$item->id}}" {{session()->has('data_confirm_edit')&&session('data_confirm_edit')['team_id'] == $item->id ? "selected": ($employee->team_id==$item->id ? "selected" : "")}}>{{$item->name}}</option>
+                                                        <option value="{{$item->id}}"
+                                                                @if(session()->has('data_confirm_edit'))
+                                                                @if(session('data_confirm_edit')['team_id'] == $item->id)
+                                                                selected
+                                                                @endif
+                                                                @elseif($employee->team_id==$item->id)
+                                                                selected
+                                                            @endif
+
+                                                        >{{$item->name}}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -96,7 +104,8 @@
                                             <div class="col-md-3">Password *</div>
                                             <div class="col-md-9">
                                                 <input type="password" class="form-control" name="password"
-                                                       placeholder='Enter this field if you change your password' value="{{session()->has('data_confirm_edit')&&session('data_confirm_edit')['password_confirm'] != "" ? session('data_confirm_edit')['password'] : ""}}">
+                                                       placeholder='Enter this field if you change your password'
+                                                       value="{{session()->has('data_confirm_edit')&&session('data_confirm_edit')['password_confirm'] != "" ? session('data_confirm_edit')['password'] : ""}}">
                                                 @error('password')
                                                 <code> {{ $message }} </code>
                                                 @enderror
@@ -105,7 +114,8 @@
                                         <div class="row" style="margin-top:15px;">
                                             <div class="col-md-3">Password confirm *</div>
                                             <div class="col-md-9">
-                                                <input type="password" class="form-control" name="password_confirm" value="{{session()->has('data_confirm_edit')&&session('data_confirm_edit')['password_confirm'] != "" ? session('data_confirm_edit')['password'] : ""}}">
+                                                <input type="password" class="form-control" name="password_confirm"
+                                                       value="{{session()->has('data_confirm_edit')&&session('data_confirm_edit')['password_confirm'] != "" ? session('data_confirm_edit')['password'] : ""}}">
                                                 @error('password_confirm')
                                                 <code> {{ $message }} </code>
                                                 @enderror
@@ -149,8 +159,15 @@
                                             <div class="col-md-9">
                                                 <select class="form-control col-md-3" id="sel1" name="position">
                                                     @foreach(config('const.position') as $key => $val)
-                                                        <option
-                                                            value="{{$key}}" {{session()->has('data_confirm_edit')&&session('data_confirm_edit')['position'] == $key ? "selected": ($employee->position == $key ? "selected" : "")}}>{{$val}}</option>
+                                                        <option value="{{$key}}"
+                                                                @if(session()->has('data_confirm_edit'))
+                                                                @if(session('data_confirm_edit')['position'] == $key)
+                                                                selected
+                                                                @endif
+                                                                @elseif($employee->position==$key)
+                                                                selected
+                                                        @endif
+                                                        >{{$val}}</option>
                                                     @endforeach
                                                 </select>
                                                 @error('position')
@@ -161,9 +178,18 @@
                                         <div class="row" style="margin-top:15px;">
                                             <div class="col-md-3">Type of work *</div>
                                             <div class="col-md-9">
-                                                <select class="form-control col-md-3" name="type_of_work">
+                                                <select class="form-control col-md-3" id="sel1" name="type_of_work">
                                                     @foreach(config('const.type_of_work') as $key => $val)
-                                                        <option value="{{$key}}" {{session()->has('data_confirm_edit')&&session('data_confirm_edit')['type_of_work'] == $key ? "selected": ($employee->type_of_work == $key ? "selected" : "")}}>{{$val}}</option>
+                                                        <option value="{{$key}}"
+                                                                @if(session()->has('data_confirm_edit'))
+                                                                    @if(session('data_confirm_edit')['type_of_work'] == $key)
+                                                                    selected
+                                                                    @endif
+                                                                @elseif($employee->type_of_work == $key)
+                                                                selected
+                                                            @endif
+
+                                                        >{{$val}}</option>
                                                     @endforeach
                                                 </select>
                                                 @error('type_of_work')

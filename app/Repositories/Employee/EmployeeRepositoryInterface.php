@@ -6,5 +6,4 @@ use App\Repositories\RepositoryInterface;
 interface EmployeeRepositoryInterface extends RepositoryInterface
 {
     public function search();
-    //public function searchSelect();
 }

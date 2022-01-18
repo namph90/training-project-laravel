@@ -34,26 +34,34 @@ abstract class BaseRepository implements RepositoryInterface
 
     public function find($id)
     {
-        return $this->model->find($id);
+        return $this->model->findOrFail($id);
     }
 
     public function create($attributes = [])
     {
-        $id = Auth::id();
-        $arr = ['ins_id' => $id, 'ins_datetime' => date('Y-m-d H:i:s')];
-        $attributes = array_merge($attributes, $arr);
+        if(!array_key_exists('ins_id', $attributes)){
+            $id = Auth::id();
+            $attributes = array_merge($attributes, ['ins_id' => $id]);
+        }
+        if(!array_key_exists('ins_datetime', $attributes)){
+            $attributes = array_merge($attributes, ['ins_datetime' => date('Y-m-d H:i:s')]);
+        }
         return $this->model->create($attributes);
     }
 
     public function update($id, $attributes = [])
     {
         $result = $this->find($id);
-        $id_upd = Auth::id();
-        $arr = ['upd_id' => $id_upd, 'upd_datetime' => date('Y-m-d H:i:s')];
-        $attributes = array_merge($attributes, $arr);
+        if(!array_key_exists('upd_id', $attributes)){
+            $id_upd = Auth::id();
+            $attributes = array_merge($attributes, ['upd_id' => $id_upd]);
+        }
+        if(!array_key_exists('upd_datetime', $attributes)){
+            $attributes = array_merge($attributes, ['upd_datetime' => date('Y-m-d H:i:s')]);
+        }
         if ($result) {
             $result->update($attributes);
-            return true;
+            return $result;
         }
 
         return false;
@@ -61,6 +69,6 @@ abstract class BaseRepository implements RepositoryInterface
 
     public function delete($id)
     {
-        return $this->update($id, ['del_flag' => '1']);
+        return $this->update($id, ['del_flag' => config('const.banned')]);
     }
 }

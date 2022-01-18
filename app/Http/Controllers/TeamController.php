@@ -3,10 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Teams\CreateRequest;
-use App\Models\Team;
 use App\Repositories\Team\TeamRepositoryInterface;
 use Illuminate\Support\Facades\Session;
-use App\Http\Controllers\SendEmailController;
 
 class TeamController extends Controller
 {
@@ -15,7 +13,6 @@ class TeamController extends Controller
     /**
      * EmployeeController constructor.
      * @param TeamRepositoryInterface $teamRepo
-     * @param \App\Http\Controllers\SendEmailController $sendEmail
      */
     public function __construct(TeamRepositoryInterface $teamRepo)
     {
@@ -24,13 +21,6 @@ class TeamController extends Controller
 
     public function show()
     {
-//        $a = $this->teamRepo->getAll();
-//        $b = $this->teamRepo->getDelete();
-//        $c = $this->teamRepo->getTest();
-//        //$data = Team::getGlobalScope('ancient')->get();
-        //$a = request()->get('searchName');
-//        $team = Team::sortable()->paginate(2);
-//        dd($team);
         $data = $this->teamRepo->search();
         return view('teams.search', ['data' => $data]);
     }
@@ -52,7 +42,7 @@ class TeamController extends Controller
         $data = request()->all();
         $result = $this->teamRepo->create($data);
         if ($result) {
-            return redirect()->route('team.search')->with('success', 'Create Successfull!');
+            return redirect()->route('team.search')->with('success', trans('messages.create_success'));
         } else {
             return view('elements.error');
         }
@@ -76,7 +66,7 @@ class TeamController extends Controller
         $data = request()->all();
         $result =  $this->teamRepo->update($id, $data);
         if ($result) {
-            return redirect()->route('team.search')->with('success', 'Update Successfull!');
+            return redirect()->route('team.search')->with('success', trans('messages.update_success'));
         } else {
             return view('elements.error');
         }
@@ -86,7 +76,7 @@ class TeamController extends Controller
     {
         $result = $this->teamRepo->delete($id);
         if ($result) {
-            return redirect()->route('team.search')->with('success', 'Delete Successfull!');
+            return redirect()->route('team.search')->with('success', trans('messages.delete_success'));
         } else {
             return view('elements.error');
         }

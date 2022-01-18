@@ -6,10 +6,9 @@ use App\Http\Requests\Employee\CreateRequest;
 use App\Http\Requests\Employee\EditRequest;
 use App\Repositories\Employee\EmployeeRepositoryInterface;
 use App\Repositories\Team\TeamRepositoryInterface;
-use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Request;
 use App\Exports\EmployeesExport;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -59,16 +58,16 @@ class EmployeeController extends Controller
 
     public function store()
     {
-        //$data = Arr::except(session('employee_store'), ['_token', 'src_img', 'tmp_url']);
         $data = session('employee_store');
         $result = $this->employeeRepo->create($data);
         $id = $result->id;
         if ($result) {
-            Storage::move('public/tmp/' . $data['avatar'], 'public/uploads/' . $id . '/' . $data['avatar']);
-            Storage::deleteDirectory('public/tmp', 'public/uploads');
-            session()->forget('check_avatar');
+            Storage::move(config('const.TEMP_DIR') . $data['avatar'], config('const.PATH_UPLOAD') . $id . '/' . $data['avatar']);
+            Storage::deleteDirectory(config('const.TEMP_DIR'), config('const.PATH_UPLOAD'));
+
+            //session()->forget('check_avatar');
             $this->sendEmail->send($result);
-            return redirect()->route('employee.search')->with('success', 'Create Successfull!');
+            return redirect()->route('employee.search')->with('success', trans('messages.create_success'));
         } else {
             return view('elements.error');
         }
@@ -99,9 +98,9 @@ class EmployeeController extends Controller
         $result =  $this->employeeRepo->update($id, $data);
         if ($result) {
             if(session()->has('tmp_url')){
-                Storage::deleteDirectory('public/uploads/' . $id);
-                Storage::move('public/tmp/' . $data['avatar'], 'public/uploads/' . $id . '/' . $data['avatar']);
-                Storage::deleteDirectory('public/tmp', 'public/uploads');
+                Storage::deleteDirectory(config('const.PATH_UPLOAD') . $id);
+                Storage::move(config('const.TEMP_DIR') . $data['avatar'], config('const.PATH_UPLOAD') . $id . '/' . $data['avatar']);
+                Storage::deleteDirectory(config('const.TEMP_DIR'), config('const.PATH_UPLOAD'));
             }
             if(session('old_data')->email != $data['email']){
                 $dataSendEmail = $this->employeeRepo->find($id);
@@ -109,7 +108,7 @@ class EmployeeController extends Controller
             }
 
             session()->forget('data_confirm_edit');
-            return redirect()->route('employee.search')->with('success', 'Update Successfull!');
+            return redirect()->route('employee.search')->with('success', trans('messages.update_success'));
         } else {
             return view('elements.error');
         }
@@ -119,8 +118,11 @@ class EmployeeController extends Controller
     {
         $result = $this->employeeRepo->delete($id);
         if ($result) {
-            Storage::deleteDirectory('public/uploads/' . $id);
-            return redirect()->route('employee.search')->with('success', 'Delete Successfull!');
+            if(Auth::id()==$id) {
+                Auth::logout();
+            }
+            Storage::deleteDirectory(config('const.PATH_UPLOAD') . $id);
+            return redirect()->route('employee.search')->with('success', trans('messages.delete_success'));
         } else {
             return view('elements.error');
         }

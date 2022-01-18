@@ -49,8 +49,8 @@
                             <td style="vertical-align: middle;">{{$item->id}}</td>
                             <td style="text-align: left; vertical-align: middle;">{{$item->name}}</td>
                             <td style="text-align:center; vertical-align: middle;">
-                                <a href="{{route('team.edit', ['id'=>$item->id])}}">
-                                    <button type="button" class="btn btn-outline-info">Edit</button>
+                                <a href="{{route('team.edit', ['id'=>$item->id])}}" class="btn btn-outline-info">
+                                    Edit
                                 </a>&nbsp;&nbsp;&nbsp;
                                 <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog"
                                      aria-labelledby="myModalLabel" aria-hidden="true">

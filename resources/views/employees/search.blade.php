@@ -4,7 +4,7 @@
         <div class="alert alert-success" style="text-align: center;">
             <strong>{{ session()->get('success') }}</strong>
         </div>
-    @endif
+    @endif</h1>
     <div class="panel panel-primary">
         <div class="panel-body">
             <form style="border: 1px solid black; padding: 20px;" method="get" action="">
@@ -83,8 +83,7 @@
                             <td style="text-align: center; vertical-align: middle;">{{$item->name}}</td>
                             <td style="text-align: left; vertical-align: middle;">{{$item->email}}</td>
                             <td style="text-align:center; vertical-align: middle;">
-                                <a href="{{route('employee.edit', ['id'=>$item->id])}}">
-                                    <button type="button" class="btn btn-outline-info">Edit</button>
+                                <a href="{{route('employee.edit', ['id'=>$item->id])}}" class="btn btn-outline-info">Edit
                                 </a>&nbsp;&nbsp;&nbsp;
                                 <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog"
                                      aria-labelledby="myModalLabel" aria-hidden="true">

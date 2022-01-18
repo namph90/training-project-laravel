@@ -10,11 +10,11 @@
     <script src="{{ asset('vendor/popper.min.js') }}"></script>
     <script src="{{ asset('vendor/bootstrap.min.js') }}"></script>
 </head>
-<body>
-<nav class="navbar bg-light navbar-light">
+<body class="d-flex flex-column min-vh-100">
+<nav class="bg-light navbar-right" style="height: 60px; line-height: 35px;">
     <ul class="nav justify-content-end">
         <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="" id="navbardrop" data-toggle="dropdown">
+            <a class="nav-link dropdown-toggle" href="{{route('home')}}">
                 Team management
             </a>
             <div class="dropdown-menu">
@@ -23,7 +23,7 @@
             </div>
         </li>
         <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="" id="navbardrop" data-toggle="dropdown">
+            <a class="nav-link dropdown-toggle" href="{{route('home')}}">
                 Employee management
             </a>
             <div class="dropdown-menu">
@@ -39,17 +39,21 @@
 </nav>
 <br>
 
-<div class="container">
+<div class="container" style="margin-top: 50px;">
     @yield('content')
 </div>
 
 </body>
-<footer class="page-footer font-small blue pt-4" style="margin-top: 50px">
+<footer class="mt-auto">
     <div class="footer-copyright text-center py-3">© 2022 Copyright:
-        <a href="#"> nam.com</a>
+        <a href="{{route('home')}}"> nam.com</a>
     </div>
 </footer>
 </html>
+<style>.dropdown:hover>.dropdown-menu {
+        display: block;
+    }
+</style>
 
 
 

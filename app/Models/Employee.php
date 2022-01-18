@@ -2,7 +2,8 @@
 
 namespace App\Models;
 
-use App\Scopes\AncientScope;
+//use App\Scopes\AncientScope;
+use App\Scopes\DelFlagScope;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -48,7 +49,7 @@ class Employee extends Authenticatable
 
     protected static function booted()
     {
-        static::addGlobalScope(new AncientScope());
+        static::addGlobalScope(new DelFlagScope());
     }
     /**
      * The attributes that should be hidden for serialization.

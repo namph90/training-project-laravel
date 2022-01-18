@@ -18,11 +18,7 @@ use Illuminate\Support\Facades\Auth;
 */
 //
 Route::get('/', function () {
-    if(Auth::check()){
-        return view('elements.home');
-    } else {
-        return view("login");
-    }
+    return redirect()->route('login');
 });
 Route::get('login', function () {
     if(Auth::check()){

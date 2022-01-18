@@ -1,6 +1,8 @@
 <?php
 return [
- 'active' => 0,
+    'active' => 0,
+    'banned' => 1,
+    'record_perpage_paging' => 10,
     'type_of_work' => [
         '1' => 'Fulltime',
         '2' => 'Partime',
@@ -22,4 +24,6 @@ return [
         '1' => 'On working',
         '2' => 'Retired',
     ],
+    'TEMP_DIR' => 'public/tmp/',
+    'PATH_UPLOAD' => 'public/uploads/',
 ];

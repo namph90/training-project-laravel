@@ -6,7 +6,6 @@ use App\Repositories\BaseRepository;
 
 class EmployeeRepository extends BaseRepository implements EmployeeRepositoryInterface
 {
-    //lấy model tương ứng
     public function getModel()
     {
         return \App\Models\Employee::class;
@@ -24,6 +23,6 @@ class EmployeeRepository extends BaseRepository implements EmployeeRepositoryInt
         if(request()->get('team')) {
             $resul->search_team(request()->get('team'));
         }
-        return $resul->paginate(10);
+        return $resul->paginate(config('const.record_perpage_paging'));
     }
 }
