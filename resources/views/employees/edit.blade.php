@@ -178,7 +178,7 @@
                                         <div class="row" style="margin-top:15px;">
                                             <div class="col-md-3">Type of work *</div>
                                             <div class="col-md-9">
-                                                <select class="form-control col-md-3" id="sel1" name="type_of_work">
+                                                <select class="form-control col-md-4" id="sel1" name="type_of_work">
                                                     @foreach(config('const.type_of_work') as $key => $val)
                                                         <option value="{{$key}}"
                                                                 @if(session()->has('data_confirm_edit'))

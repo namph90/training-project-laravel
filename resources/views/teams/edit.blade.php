@@ -24,7 +24,7 @@
                                             <div class="col-md-2">Name *</div>
                                             <div class="col-md-5">
                                                 <input type="text" class="form-control email" name="name"
-                                                       value="{{old('name') ?: (session()->has('value_edit') ? session('value_edit') : (isset($team->name) ? $team->name : ""))}}">
+                                                       value="{{session()->has('old_value') ? session('old_value')['name'] : (isset($team->name) ? $team->name : "")}}">
                                                 @error('name')
                                                 <code> {{ $message }} </code>
                                                 @enderror

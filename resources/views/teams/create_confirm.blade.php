@@ -24,7 +24,7 @@
                                     <div class="row" style="margin-top:15px;">
                                         <div class="col-md-2"></div>
                                         <div class="col-md-8">
-                                            <a href="{{route('team.create')}}"><input style="float: left;" type="button" value="Back" class="btn btn-danger"></a>
+                                            <a href="{{route('team.return_back')}}"><input style="float: left;" type="button" value="Back" class="btn btn-danger"></a>
                                             <input type="button" value="Save" style="float:right;"
                                                    class="btn btn-primary" data-toggle="modal"
                                                    data-target="#confirm-delete">

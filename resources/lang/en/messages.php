@@ -5,4 +5,5 @@ return [
     'create_success' => 'Create Sucessfull!',
     'update_success' => 'Update Successfull!',
     'delete_success' => 'Delete Successfull!',
+    'delete_fail' => 'Delete fails!',
 ];

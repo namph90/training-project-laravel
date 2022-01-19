@@ -42,6 +42,7 @@ Route::group(['prefix' => 'management', "middleware" => "checklogin"], function 
         Route::post('edit_confirm/{id}', [TeamController::class, 'editConfirm'])->name('team.edit_confirm');
         Route::post('edit/{id}', [TeamController::class, 'update'])->name('team.update');
         Route::get('delete/{id}', [TeamController::class, 'destroy'])->name('team.destroy');
+        Route::get('back', [TeamController::class, 'returnBack'])->name('team.return_back');
     });
 
     Route::group(['prefix' => 'employee'], function () {
@@ -53,6 +54,7 @@ Route::group(['prefix' => 'management', "middleware" => "checklogin"], function 
         Route::post('edit_confirm/{id}', [EmployeeController::class, 'editConfirm'])->name('employee.edit_confirm');
         Route::post('edit/{id}', [EmployeeController::class, 'update'])->name('employee.update');
         Route::get('delete/{id}', [EmployeeController::class, 'destroy'])->name('employee.destroy');
+        Route::get('back', [EmployeeController::class, 'returnBack'])->name('employee.back');
         Route::get('export', [EmployeeController::class, 'export'])->name('employee.export');
     });
 });

@@ -27,12 +27,16 @@ class TeamController extends Controller
 
     public function create()
     {
+
+        if(!session()->has('return_back')){
+            session()->forget('value');
+        }
         return view('teams.create');
     }
 
     public function createConfirm(CreateRequest $request)
     {
-        $data = request()->all();
+        $data = session('old_value');
         Session::flash('value', $data['name']);
         return view('teams.create_confirm', ['data' => $data]);
     }
@@ -50,6 +54,9 @@ class TeamController extends Controller
 
     public function edit($id)
     {
+        if(!session()->has('token')){
+            session()->forget('old_value');
+        }
         $team = $this->teamRepo->find($id);
         return view('teams.edit', ['team'=>$team]);
     }
@@ -57,7 +64,7 @@ class TeamController extends Controller
     public function editConfirm(CreateRequest $request, $id)
     {
         $data = request()->all();
-        Session::flash('value_edit', $data['name']);
+        //Session::flash('value_edit', $data['name']);
         return view('teams.edit_confirm', ['data' => $data, 'id'=>$id]);
     }
 
@@ -74,11 +81,19 @@ class TeamController extends Controller
 
     public function destroy($id)
     {
-        $result = $this->teamRepo->delete($id);
-        if ($result) {
-            return redirect()->route('team.search')->with('success', trans('messages.delete_success'));
+        $team = $this->teamRepo->find($id);
+        if($team->employees->count()==0){
+            $this->teamRepo->delete($id);
+            Session::flash('success', __('messages.delete_success'));
         } else {
-            return view('elements.error');
+            Session::flash('error', __('messages.delete_fail'));
         }
+        return redirect()->route('team.search');
+    }
+
+    public function returnBack()
+    {
+        session()->flash('return_back');
+        return view('teams.create');
     }
 }

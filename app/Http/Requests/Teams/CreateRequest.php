@@ -23,6 +23,8 @@ class CreateRequest extends FormRequest
      */
     public function rules()
     {//unique:teams
+        session()->put('old_value', request()->all());
+        session()->flash('token', request()->get('_token'));
         return [
             'name' => 'bail|required|max:128',
         ];

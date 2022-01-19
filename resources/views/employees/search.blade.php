@@ -4,7 +4,7 @@
         <div class="alert alert-success" style="text-align: center;">
             <strong>{{ session()->get('success') }}</strong>
         </div>
-    @endif</h1>
+    @endif
     <div class="panel panel-primary">
         <div class="panel-body">
             <form style="border: 1px solid black; padding: 20px;" method="get" action="">
