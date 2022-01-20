@@ -5,12 +5,12 @@ namespace App\Models;
 use App\Scopes\DelFlagScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-//use App\Scopes\AncientScope;
 use Kyslik\ColumnSortable\Sortable;
 
 class Team extends Model
 {
     use HasFactory, Sortable;
+
     protected $fillable = [
         'name',
         'ins_id',
@@ -30,7 +30,7 @@ class Team extends Model
 
     public function scopeSearch_name($query, $searchName)
     {
-        return $query->where('name','like', '%'.$searchName.'%');
+        return $query->where('name', 'like', '%' . $searchName . '%');
     }
 
     public function employees()

@@ -14,8 +14,8 @@ class CreateEmployeesTable extends Migration
     public function up()
     {
         Schema::create('employees', function (Blueprint $table) {
-            $table->increments('id',11);
-            $table->integer('team_id')->length(11);
+            $table->increments('id', 11);
+            $table->integer('team_id')->unsigned()->index();
             $table->string('email', 128);
             $table->string('password', 64);
             $table->string('first_name', 128);
@@ -33,6 +33,7 @@ class CreateEmployeesTable extends Migration
             $table->integer('upd_id')->length(11)->nullable();
             $table->dateTime('ins_datetime');
             $table->dateTime('upd_datetime')->nullable();
+            $table->foreign('team_id')->references('id')->on('teams')->onDelete('restrict');
         });
     }
 

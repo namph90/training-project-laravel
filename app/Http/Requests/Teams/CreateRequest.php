@@ -25,6 +25,7 @@ class CreateRequest extends FormRequest
     {//unique:teams
         session()->put('old_value', request()->all());
         session()->flash('token', request()->get('_token'));
+
         return [
             'name' => 'bail|required|max:128',
         ];

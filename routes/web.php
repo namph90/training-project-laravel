@@ -2,9 +2,9 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EmployeeController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TeamController;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,8 +21,8 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 Route::get('login', function () {
-    if(Auth::check()){
-        return view('elements.home');
+    if (Auth::check()) {
+        return redirect()->route('home');
     } else {
         return view("login");
     }
@@ -54,7 +54,6 @@ Route::group(['prefix' => 'management', "middleware" => "checklogin"], function 
         Route::post('edit_confirm/{id}', [EmployeeController::class, 'editConfirm'])->name('employee.edit_confirm');
         Route::post('edit/{id}', [EmployeeController::class, 'update'])->name('employee.update');
         Route::get('delete/{id}', [EmployeeController::class, 'destroy'])->name('employee.destroy');
-        Route::get('back', [EmployeeController::class, 'returnBack'])->name('employee.back');
         Route::get('export', [EmployeeController::class, 'export'])->name('employee.export');
     });
 });

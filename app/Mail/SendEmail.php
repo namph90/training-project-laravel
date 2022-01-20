@@ -9,7 +9,9 @@ use Illuminate\Queue\SerializesModels;
 class SendEmail extends Mailable
 {
     use Queueable, SerializesModels;
+
     protected $employee;
+
     /**
      * Create a new message instance.
      *
@@ -28,6 +30,6 @@ class SendEmail extends Mailable
      */
     public function build()
     {
-        return $this->subject('ĐĂNG KÝ THÀNH CÔNG')->view('email.content')->with("employee",$this->employee);
+        return $this->subject('ĐĂNG KÝ THÀNH CÔNG')->view('email.content')->with("employee", $this->employee);
     }
 }

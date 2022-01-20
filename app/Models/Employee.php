@@ -2,16 +2,12 @@
 
 namespace App\Models;
 
-//use App\Scopes\AncientScope;
 use App\Scopes\DelFlagScope;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Hash;
-use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Database\Eloquent\Model;
 use Kyslik\ColumnSortable\Sortable;
+use Laravel\Sanctum\HasApiTokens;
 
 class Employee extends Authenticatable
 {
@@ -45,12 +41,13 @@ class Employee extends Authenticatable
     ];
 
     public $timestamps = false;
-    public $sortable = ['id', 'team','last_name', 'email'];
+    public $sortable = ['id', 'team', 'last_name', 'email'];
 
     protected static function booted()
     {
         static::addGlobalScope(new DelFlagScope());
     }
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -73,17 +70,17 @@ class Employee extends Authenticatable
 
     public function scopeSearch_name($query, $searchName)
     {
-        return $query->where('last_name','like', '%'.$searchName.'%');
+        return $query->where('last_name', 'like', '%' . $searchName . '%');
     }
 
     public function scopeSearch_team($query, $searchTeam)
     {
-        return $query->where('team_id','=', $searchTeam);
+        return $query->where('team_id', '=', $searchTeam);
     }
 
     public function scopeSearch_email($query, $searchEmail)
     {
-        return $query->where('email','like', '%'.$searchEmail.'%');
+        return $query->where('email', 'like', '%' . $searchEmail . '%');
     }
 
     public function team()

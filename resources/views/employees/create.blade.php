@@ -22,7 +22,8 @@
 
                                                 <img id="output" class="img-rounded image" alt="Ảnh" width="100"
                                                      src="{{asset(session()->has('url_img')?session('url_img'):(session()->has('employee_create') ? session('employee_create')['src_img'] : "")) }}"/>
-                                                <input type="hidden" name="tmp_url" value="{{session()->has('tmp_url')?session('tmp_url'):""}}">
+                                                <input type="hidden" name="tmp_url"
+                                                       value="{{session()->has('tmp_url')?session('tmp_url'):""}}">
                                                 @error('avatar')
                                                 <code> {{ $message }} </code>
                                                 @enderror

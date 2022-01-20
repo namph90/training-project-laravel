@@ -50,7 +50,7 @@
     </div>
 </footer>
 </html>
-<style>.dropdown:hover>.dropdown-menu {
+<style>.dropdown:hover > .dropdown-menu {
         display: block;
     }
 </style>

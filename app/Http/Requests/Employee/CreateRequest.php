@@ -54,8 +54,10 @@ class CreateRequest extends FormRequest
 
         } else if (request()->get('tmp_url') == "") {
             $rules['avatar'] = 'bail|required|image|mimes:jpeg,png,jpg,gif,svg|max:2097152|min:2';
+
         } else {
             $rules['avatar'] = 'bail|image|mimes:jpeg,png,jpg,gif,svg|max:2097152|min:2';
+
         }
 
         $request = request()->except(['avatar']);

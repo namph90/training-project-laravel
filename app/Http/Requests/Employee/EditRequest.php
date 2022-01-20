@@ -60,12 +60,13 @@ class EditRequest extends FormRequest
             $data['password'] = request('password');
         }
 
-        if(request('email') != session('old_data')->email){
+        if (request('email') != session('old_data')->email) {
             $rules['email'] = 'bail|required|email|max:128|unique:employees';
         }
 
         session()->put('data_confirm_edit', $data);
         session()->flash('token', request()->get('_token'));
+
         return $rules;
     }
 }

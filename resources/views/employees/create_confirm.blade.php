@@ -128,7 +128,8 @@
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h4 class="modal-title" id="myModalLabel">Confirm Create</h4>
+                                                            <h4 class="modal-title" id="myModalLabel">Confirm
+                                                                Create</h4>
                                                         </div>
                                                         <div class="modal-body">
                                                             <p>Do you want to create employee?</p>

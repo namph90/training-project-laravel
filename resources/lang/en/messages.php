@@ -5,5 +5,5 @@ return [
     'create_success' => 'Create Sucessfull!',
     'update_success' => 'Update Successfull!',
     'delete_success' => 'Delete Successfull!',
-    'delete_fail' => 'Delete fails!',
+    'delete_fail' => 'Cannot delete because there are employees in the team!',
 ];

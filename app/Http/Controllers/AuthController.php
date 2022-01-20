@@ -12,11 +12,12 @@ class AuthController extends Controller
         $email = request('email');
         $password = request('password');
         Session::flash('value_old', request()->all());
-        if (empty($email)||empty($password)) {
+
+        if (empty($email) || empty($password)) {
             Session::flash('login_err_blank');
             return redirect()->route('login');
 
-        } elseif(Auth::attempt(['email' => $email, 'password' => $password])) {
+        } elseif (Auth::attempt(['email' => $email, 'password' => $password])) {
             return redirect()->route('home');
 
         } else {
@@ -24,6 +25,7 @@ class AuthController extends Controller
             return redirect()->route('login');
         }
     }
+
     public function logout()
     {
         Auth::logout();
