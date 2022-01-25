@@ -17,7 +17,7 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
         $resul = $this->model->sortable(['id' => 'desc']);
 
         if (request()->get('searchName')) {
-            $resul->search_name(request()->get('searchName'));
+            $resul->where('name', 'like', '%' . request()->get('searchName') . '%');
         }
 
         return $resul->paginate(3);

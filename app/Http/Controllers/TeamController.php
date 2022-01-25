@@ -6,7 +6,7 @@ use App\Http\Requests\Teams\CreateRequest;
 use App\Repositories\Team\TeamRepositoryInterface;
 use Illuminate\Support\Facades\Session;
 
-class TeamController extends Controller
+class TeamController extends BaseController
 {
     protected $teamRepo;
 
@@ -16,70 +16,89 @@ class TeamController extends Controller
      */
     public function __construct(TeamRepositoryInterface $teamRepo)
     {
+        parent::__construct();
+        $this->setSession('team');
         $this->teamRepo = $teamRepo;
     }
 
     public function show()
     {
-        $data = $this->teamRepo->search();
-        return view('teams.search', ['data' => $data]);
+        try {
+            $data = $this->teamRepo->search();
+            return view('teams.search', ['data' => $data]);
+
+        } catch(\Exception $e){
+            return abort(500);
+        }
+
     }
 
     public function create()
     {
-        if (!session()->has('return_back')) {
-            session()->forget('value');
+        try {
+            if (!session()->has('team_returnBack')) {
+                session()->forget('team_createConfirm');
+            }
+            return view('teams.create');
+
+        } catch(\Exception $e){
+            return abort(500);
         }
 
-        return view('teams.create');
     }
 
     public function createConfirm(CreateRequest $request)
     {
-        $data = session('old_value');
-        Session::flash('value', $data['name']);
+        try {
+            $this->setFormData(request()->all());
+            $data = $this->getFormData();
+            $this->getFormData(true);
 
-        return view('teams.create_confirm', ['data' => $data]);
+            return view('teams.create_confirm', ['data' => $data]);
+
+        } catch(\Exception $e){
+            return abort(500);
+        }
+
     }
 
     public function store()
     {
-        $data = request()->all();
-        $result = $this->teamRepo->create($data);
-
-        if ($result) {
-            return redirect()->route('team.search')->with('success', trans('messages.create_success'));
-        } else {
-            return view('elements.error');
-        }
+        $data = request()->except('_token');
+        $this->teamRepo->create($data);
+        return redirect()->route('team.search');
     }
 
     public function edit($id)
     {
-        if (!session()->has('token')) {
-            session()->forget('old_value');
+        try {
+            $team = $this->teamRepo->find($id);
+            return view('teams.edit', ['team' => $team]);
+
+        } catch(\Exception $e){
+            return abort(500);
         }
 
-        $team = $this->teamRepo->find($id);
-        return view('teams.edit', ['team' => $team]);
     }
 
     public function editConfirm(CreateRequest $request, $id)
     {
-        $data = request()->all();
-        return view('teams.edit_confirm', ['data' => $data, 'id' => $id]);
+        try {
+            $data = request()->all();
+            $this->setFormData($data);
+            $this->getFormData(true);
+            return view('teams.edit_confirm', ['data' => $data, 'id' => $id]);
+
+        } catch(\Exception $e){
+            return abort(500);
+        }
     }
 
     public function update($id)
     {
-        $data = request()->all();
-        $result = $this->teamRepo->update($id, $data);
-
-        if ($result) {
-            return redirect()->route('team.search')->with('success', trans('messages.update_success'));
-        } else {
-            return view('elements.error');
-        }
+        $data = request()->except('_token');
+        $this->teamRepo->update($id, $data);
+        return redirect()->route('team.search');
     }
 
     public function destroy($id)
@@ -94,13 +113,15 @@ class TeamController extends Controller
             Session::flash('error', __('messages.delete_fail'));
 
         }
-        
+
         return redirect()->route('team.search');
     }
 
     public function returnBack()
     {
-        session()->flash('return_back');
+        $this->setFormData(array());
+        $this->setFormData(true);
         return view('teams.create');
     }
+
 }

@@ -2,6 +2,7 @@
 @section('content')
     <div id="layoutSidenav_content">
         <main>
+{{--            {{dd(session()->has('img_avatar') ? session('img_avatar') : "")}}--}}
             <div class="container-fluid">
                 <section class="content">
                     <div class="col-md-12">
@@ -29,9 +30,7 @@
                                                      src="{{asset(session()->has('img_avatar') ? session('img_avatar')['src_img'] : ('storage/uploads/'.$employee->id.'/'.$employee->avatar))}}"/>
                                                 <input type="hidden" name="tmp_url"
                                                        value="{{session()->has('tmp_url')?session('tmp_url'):""}}">
-                                                @error('avatar')
-                                                <code> {{ $message }} </code>
-                                                @enderror
+                                                @include('elements.message_error', ['value' => 'avatar'])
                                             </div>
 
                                         </div>
@@ -40,41 +39,27 @@
                                             <div class="col-md-9">
                                                 <select class="form-control col-md-3" id="sel1" name="team_id">
                                                     @foreach($teams as $item)
-                                                        <option value="{{$item->id}}"
-                                                                @if(session()->has('data_confirm_edit'))
-                                                                @if(session('data_confirm_edit')['team_id'] == $item->id)
-                                                                selected
-                                                                @endif
-                                                                @elseif($employee->team_id==$item->id)
-                                                                selected
-                                                            @endif
-
+                                                        <option value="{{$item->id}}" {{getDataEditForm($employee, 'employee_editConfirm', 'team_id') == $item->id ? "selected" : ""}}
                                                         >{{$item->name}}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
-                                            @error('team')
-                                            <code> {{ $message }} </code>
-                                            @enderror
+                                            @include('elements.message_error', ['value' => 'team'])
                                         </div>
                                         <div class="row" style="margin-top:15px;">
                                             <div class="col-md-3">First name *</div>
                                             <div class="col-md-9">
                                                 <input type="text" class="form-control" name="first_name"
-                                                       value="{{session()->has('data_confirm_edit') ? session('data_confirm_edit')['first_name'] : $employee->first_name}}">
-                                                @error('first_name')
-                                                <code> {{ $message }} </code>
-                                                @enderror
+                                                       value="{{getDataEditForm($employee, 'employee_editConfirm', 'first_name')}}">
+                                                @include('elements.message_error', ['value' => 'first_name'])
                                             </div>
                                         </div>
                                         <div class="row" style="margin-top:15px;">
                                             <div class="col-md-3">Last name *</div>
                                             <div class="col-md-9">
                                                 <input type="text" class="form-control" name="last_name"
-                                                       value="{{session()->has('data_confirm_edit') ? session('data_confirm_edit')['last_name'] : $employee->last_name}}">
-                                                @error('last_name')
-                                                <code> {{ $message }} </code>
-                                                @enderror
+                                                       value="{{getDataEditForm($employee, 'employee_editConfirm', 'last_name')}}">
+                                                @include('elements.message_error', ['value' => 'last_name'])
                                             </div>
                                         </div>
                                         <div class="row" style="margin-top:15px;">
@@ -82,22 +67,18 @@
                                             <div class="col-md-9">
                                                 @foreach(config('const.gerder') as $key => $val)
                                                     <input type="radio" name="gerder"
-                                                           value="{{$key}}" {{session()->has('data_confirm_edit')&&session('data_confirm_edit')['gerder']== $key ? "checked" : ($employee->gerder == $key ? "checked" : "")}}>
+                                                           value="{{$key}}" {{getDataEditForm($employee, 'employee_editConfirm', 'gerder')==$key? "checked" : ""}}>
                                                     {{$val}}&emsp;&emsp;&emsp;&emsp;
                                                 @endforeach
-                                                @error('gerder')
-                                                <code> {{ $message }} </code>
-                                                @enderror
+                                                @include('elements.message_error', ['value' => 'gerder'])
                                             </div>
                                         </div>
                                         <div class="row" style="margin-top:15px;">
                                             <div class="col-md-3">Email *</div>
                                             <div class="col-md-9">
                                                 <input type="text" class="form-control" name="email"
-                                                       value="{{session()->has('data_confirm_edit') ? session('data_confirm_edit')['email'] : $employee->email}}">
-                                                @error('email')
-                                                <code> {{ $message }} </code>
-                                                @enderror
+                                                       value="{{getDataEditForm($employee, 'employee_editConfirm', 'email')}}">
+                                                @include('elements.message_error', ['value' => 'email'])
                                             </div>
                                         </div>
                                         <div class="row" style="margin-top:15px;">
@@ -105,40 +86,32 @@
                                             <div class="col-md-9">
                                                 <input type="password" class="form-control" name="password"
                                                        placeholder='Enter this field if you change your password'
-                                                       value="{{session()->has('data_confirm_edit')&&session('data_confirm_edit')['password_confirm'] != "" ? session('data_confirm_edit')['password'] : ""}}">
-                                                @error('password')
-                                                <code> {{ $message }} </code>
-                                                @enderror
+                                                       value="{{session()->has('employee_editConfirm')&&session('employee_editConfirm')['password_confirm'] != "" ? session('employee_editConfirm')['password'] : ""}}">
+                                                @include('elements.message_error', ['value' => 'password'])
                                             </div>
                                         </div>
                                         <div class="row" style="margin-top:15px;">
                                             <div class="col-md-3">Password confirm *</div>
                                             <div class="col-md-9">
                                                 <input type="password" class="form-control" name="password_confirm"
-                                                       value="{{session()->has('data_confirm_edit')&&session('data_confirm_edit')['password_confirm'] != "" ? session('data_confirm_edit')['password'] : ""}}">
-                                                @error('password_confirm')
-                                                <code> {{ $message }} </code>
-                                                @enderror
+                                                       value="{{session()->has('employee_editConfirm')&&session('employee_editConfirm')['password_confirm'] != "" ? session('employee_editConfirm')['password'] : ""}}">
+                                                @include('elements.message_error', ['value' => 'password_confirm'])
                                             </div>
                                         </div>
                                         <div class="row" style="margin-top:15px;">
                                             <div class="col-md-3">Birthday *</div>
                                             <div class="col-md-9">
                                                 <input type="date" class="form-control" name="birthday"
-                                                       value="{{session()->has('data_confirm_edit') ? session('data_confirm_edit')['birthday'] : $employee->birthday}}">
-                                                @error('birthday')
-                                                <code> {{ $message }} </code>
-                                                @enderror
+                                                       value="{{getDataEditForm($employee, 'employee_editConfirm', 'birthday')}}">
+                                                @include('elements.message_error', ['value' => 'birthday'])
                                             </div>
                                         </div>
                                         <div class="row" style="margin-top:15px;">
                                             <div class="col-md-3">Address *</div>
                                             <div class="col-md-9">
                                                 <input type="text" class="form-control" name="address"
-                                                       value="{{session()->has('data_confirm_edit') ? session('data_confirm_edit')['address'] : $employee->address}}">
-                                                @error('address')
-                                                <code> {{ $message }} </code>
-                                                @enderror
+                                                       value="{{getDataEditForm($employee, 'employee_editConfirm', 'address')}}">
+                                                @include('elements.message_error', ['value' => 'address'])
                                             </div>
                                         </div>
                                         <div class="row" style="margin-top:15px;">
@@ -146,12 +119,10 @@
                                             <div class="col-md-9">
                                                 <div style="display: flex;">
                                                     <input type="text" class="form-control" name="salary"
-                                                           value="{{session()->has('data_confirm_edit') ? session('data_confirm_edit')['salary'] : $employee->salary}}">&nbsp;
+                                                           value="{{getDataEditForm($employee, 'employee_editConfirm', 'salary')}}">&nbsp;
                                                     &nbsp; <span>VND</span>
                                                 </div>
-                                                @error('salary')
-                                                <code> {{ $message }} </code>
-                                                @enderror
+                                                @include('elements.message_error', ['value' => 'salary'])
                                             </div>
                                         </div>
                                         <div class="row" style="margin-top:15px;">
@@ -159,20 +130,11 @@
                                             <div class="col-md-9">
                                                 <select class="form-control col-md-3" id="sel1" name="position">
                                                     @foreach(config('const.position') as $key => $val)
-                                                        <option value="{{$key}}"
-                                                                @if(session()->has('data_confirm_edit'))
-                                                                @if(session('data_confirm_edit')['position'] == $key)
-                                                                selected
-                                                                @endif
-                                                                @elseif($employee->position==$key)
-                                                                selected
-                                                        @endif
+                                                        <option value="{{$key}}" {{getDataEditForm($employee, 'employee_editConfirm', 'position') == $key ? "selected" : ""}}
                                                         >{{$val}}</option>
                                                     @endforeach
                                                 </select>
-                                                @error('position')
-                                                <code> {{ $message }} </code>
-                                                @enderror
+                                                @include('elements.message_error', ['value' => 'position'])
                                             </div>
                                         </div>
                                         <div class="row" style="margin-top:15px;">
@@ -180,21 +142,11 @@
                                             <div class="col-md-9">
                                                 <select class="form-control col-md-4" id="sel1" name="type_of_work">
                                                     @foreach(config('const.type_of_work') as $key => $val)
-                                                        <option value="{{$key}}"
-                                                                @if(session()->has('data_confirm_edit'))
-                                                                    @if(session('data_confirm_edit')['type_of_work'] == $key)
-                                                                    selected
-                                                                    @endif
-                                                                @elseif($employee->type_of_work == $key)
-                                                                selected
-                                                            @endif
-
+                                                        <option value="{{$key}}" {{getDataEditForm($employee, 'employee_editConfirm', 'type_of_work') == $key ? "selected" : ""}}
                                                         >{{$val}}</option>
                                                     @endforeach
                                                 </select>
-                                                @error('type_of_work')
-                                                <code> {{ $message }} </code>
-                                                @enderror
+                                                @include('elements.message_error', ['value' => 'type_of_work'])
                                             </div>
                                         </div>
                                         <div class="row" style="margin-top:15px;">
@@ -202,12 +154,10 @@
                                             <div class="col-md-9">
                                                 @foreach(config('const.status') as $key => $val)
                                                     <input type="radio" name="status"
-                                                           value="{{$key}}" {{session()->has('data_confirm_edit')&&session('data_confirm_edit')['status']== $key ? "checked" : ($employee->status == $key ? "checked" : "")}}>
+                                                           value="{{$key}}" {{getDataEditForm($employee, 'employee_editConfirm', 'status') == $key ? "checked" : ""}}>
                                                     {{$val}}&emsp;&emsp;&emsp;&emsp;
                                                 @endforeach
-                                                @error('status')
-                                                <code> {{ $message }} </code>
-                                                @enderror
+                                                @include('elements.message_error', ['value' => 'status'])
                                             </div>
 
                                         </div>

@@ -68,21 +68,6 @@ class Employee extends Authenticatable
         $this->attributes['password'] = bcrypt($password);
     }
 
-    public function scopeSearch_name($query, $searchName)
-    {
-        return $query->where('last_name', 'like', '%' . $searchName . '%');
-    }
-
-    public function scopeSearch_team($query, $searchTeam)
-    {
-        return $query->where('team_id', '=', $searchTeam);
-    }
-
-    public function scopeSearch_email($query, $searchEmail)
-    {
-        return $query->where('email', 'like', '%' . $searchEmail . '%');
-    }
-
     public function team()
     {
         return $this->belongsTo(Team::class);

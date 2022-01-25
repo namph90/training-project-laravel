@@ -8,6 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class SendEmailJob implements ShouldQueue
@@ -19,7 +20,7 @@ class SendEmailJob implements ShouldQueue
     /**
      * Create a new job instance.
      *
-     * @return void
+     * @param $employee
      */
     public function __construct($employee)
     {
@@ -36,5 +37,12 @@ class SendEmailJob implements ShouldQueue
     {
         $email = new SendEmail($this->employee);
         Mail::to($this->employee->email)->queue($email);
+        Log::info('New Job', ['id' => $this->employee->id, 'email' => $this->employee->email]);
+
+    }
+
+    public function failed()
+    {
+        Log::info('Fail Job', ['id' => $this->employee->id, 'email' => $this->employee->email]);
     }
 }

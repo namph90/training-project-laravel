@@ -16,17 +16,14 @@
             <div class="panel-heading">
                 <h2 class="text-center">LOGIN</h2>
             </div>
-            @if (session()->has('login_err'))
-                <div style="color: red">{{ trans('messages.login_err') }}</div>
-            @endif
-            @if (session()->has('login_err_blank'))
-                <div style="color: red">{{ trans('messages.login_required') }}</div>
-            @endif
+            @foreach ($errors->all() as $error)
+                <div style="color: red">{{$error}}</div
+            @endforeach
             <div class="panel-body">
                 <p class="form-group">
                     <label for="email">Email:</label>
                     <input type="text" class="form-control" id="email" name="email" placeholder="Enter Email"
-                           value="{{session()->has('value_old') ? session()->get('value_old')['email'] : ""}}">
+                           value="{{old('email')}}">
             </div>
             <div class="form-group">
                 <label for="pwd">Password:</label>

@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 abstract class BaseRepository implements RepositoryInterface
 {
@@ -34,17 +35,29 @@ abstract class BaseRepository implements RepositoryInterface
 
     public function create($attributes = [])
     {
-        if (!array_key_exists('ins_id', $attributes)) {
+        if (empty($attributes['ins_id'])) {
             $id = Auth::id();
             $attributes = array_merge($attributes, ['ins_id' => $id]);
 
         }
-        if (!array_key_exists('ins_datetime', $attributes)) {
+        if (empty($attributes['ins_datetime'])) {
             $attributes = array_merge($attributes, ['ins_datetime' => date('Y-m-d H:i:s')]);
 
         }
+        try {
+            foreach ($attributes as $key => $value) {
+                $this->model->$key = $value;
+            }
+            DB::transaction(function(){
+                $this->model->save();
+            });
+            session()->flash('success', __('messages.create_success'));
+            return $this->model;
 
-        return $this->model->create($attributes);
+        } catch(\Exception $e){
+            session()->flash('error', __('messages.create_fail'));
+            return false;
+        }
     }
 
     public function delete($id)
@@ -56,21 +69,29 @@ abstract class BaseRepository implements RepositoryInterface
     {
         $result = $this->find($id);
 
-        if (!array_key_exists('upd_id', $attributes)) {
+        if (empty($attributes['upd_id'])) {
             $id_upd = Auth::id();
             $attributes = array_merge($attributes, ['upd_id' => $id_upd]);
-        }
 
-        if (!array_key_exists('upd_datetime', $attributes)) {
+        }
+        if (empty($attributes['upd_datetime'])) {
             $attributes = array_merge($attributes, ['upd_datetime' => date('Y-m-d H:i:s')]);
-        }
 
-        if ($result) {
-            $result->update($attributes);
+        }
+        try {
+            foreach ($attributes as $key => $value) {
+                $result->$key = $value;
+            }
+            DB::transaction(function() use($result){
+                $result->save();
+            });
+            session()->flash('success', __('messages.update_success'));
             return $result;
-        }
 
-        return false;
+        } catch(\Exception $e){
+            session()->flash('error', __('messages.update_fail'));
+            return false;
+        }
     }
 
     public function find($id)

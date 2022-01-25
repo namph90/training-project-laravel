@@ -5,6 +5,11 @@
             <strong>{{ session()->get('success') }}</strong>
         </div>
     @endif
+    @if (session()->has('error'))
+        <div class="alert alert-danger" style="text-align: center;">
+            <strong>{{ session()->get('error') }}</strong>
+        </div>
+    @endif
     <div class="panel panel-primary">
         <div class="panel-body">
             <form style="border: 1px solid black; padding: 20px;" method="get" action="">

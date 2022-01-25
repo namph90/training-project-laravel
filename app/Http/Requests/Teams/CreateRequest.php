@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Teams;
 
+use http\Env\Request;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CreateRequest extends FormRequest
@@ -23,11 +24,16 @@ class CreateRequest extends FormRequest
      */
     public function rules()
     {//unique:teams
-        session()->put('old_value', request()->all());
         session()->flash('token', request()->get('_token'));
-
         return [
             'name' => 'bail|required|max:128',
         ];
     }
+//    public function withValidator($validator)
+//    {
+//        //All rules have passed, convert our spatial reference to multiple formats and merge to the request for persisting.
+//        if ($validator->fails()) {
+//           return back()->with('old', request()->all());
+//        }
+//    }
 }

@@ -28,7 +28,6 @@ class EditRequest extends FormRequest
      */
     public function rules()
     {
-        $data = array();
         $rules = [
             'first_name' => 'bail|required|max:128',
             'last_name' => 'bail|required|max:128',
@@ -41,18 +40,14 @@ class EditRequest extends FormRequest
             'status' => 'bail|required',
         ];
         if (request()->hasFile('avatar')) {
-            session()->put('tmp_url', request()->file('avatar')->getPathname());
 
-            $name = request()->file('avatar')->getClientOriginalName();
-            Storage::putFileAs(config('const.TEMP_DIR'), request()->file('avatar'), $name);
-            $data = ['src_img' => "storage/tmp/$name", 'avatar' => $name];
+            $data = validateImage('avatar');
             session()->put('img_avatar', $data);
 
         } elseif (request()->get('tmp_url') == "") {
-            $data = ['src_img' => 'storage/uploads/' . session('old_data')->id . '/' . session('old_data')->avatar, 'avatar' => session('old_data')->avatar];
+            $data = ['src_img' => 'storage/uploads/' . session('employee_edit')->id . '/' . session('employee_edit')->avatar, 'avatar' => session('employee_edit')->avatar];
             session()->put('img_avatar', $data);
         }
-        $data = array_merge(session('img_avatar'), request()->except(['avatar', 'password']));
 
         if (request('password') != null) {
             $rules['password'] = 'required|max:64';
@@ -60,13 +55,11 @@ class EditRequest extends FormRequest
             $data['password'] = request('password');
         }
 
-        if (request('email') != session('old_data')->email) {
+        if (request('email') != session('employee_edit')->email) {
             $rules['email'] = 'bail|required|email|max:128|unique:employees';
         }
 
-        session()->put('data_confirm_edit', $data);
         session()->flash('token', request()->get('_token'));
-
         return $rules;
     }
 }

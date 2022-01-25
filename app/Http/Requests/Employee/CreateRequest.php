@@ -27,7 +27,7 @@ class CreateRequest extends FormRequest
      */
     public function rules()
     {
-        $data = array();
+        //$data = array();
         $rules = [
             'first_name' => 'bail|required|max:128',
             'last_name' => 'bail|required|max:128',
@@ -41,12 +41,7 @@ class CreateRequest extends FormRequest
             'status' => 'bail|required',
         ];
         if (request()->hasFile('avatar')) {
-            session()->put('tmp_url', request()->file('avatar')->getPathname());
-
-            $name = request()->file('avatar')->getClientOriginalName();
-            Storage::putFileAs(config('const.TEMP_DIR'), request()->file('avatar'), $name);
-            $data = ['src_img' => "storage/tmp/$name", 'avatar' => $name];
-
+            $data = validateImage('avatar');
             session()->put('img_avatar', $data);
             session()->put('url_img', $data['src_img']);
 
@@ -59,10 +54,6 @@ class CreateRequest extends FormRequest
             $rules['avatar'] = 'bail|image|mimes:jpeg,png,jpg,gif,svg|max:2097152|min:2';
 
         }
-
-        $request = request()->except(['avatar']);
-        $data = array_merge(session('img_avatar'), $request);
-        session()->put('data_confirm', $data);
         session()->flash('token', request()->get('_token'));
 
         return $rules;

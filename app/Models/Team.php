@@ -28,11 +28,6 @@ class Team extends Model
         static::addGlobalScope(new DelFlagScope());
     }
 
-    public function scopeSearch_name($query, $searchName)
-    {
-        return $query->where('name', 'like', '%' . $searchName . '%');
-    }
-
     public function employees()
     {
         return $this->hasMany(Employee::class);

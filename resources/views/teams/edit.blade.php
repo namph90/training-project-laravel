@@ -2,6 +2,7 @@
 @section('content')
     <div id="layoutSidenav_content">
         <main>
+
             <div class="container-fluid">
                 <section class="content">
                     <div class="col-md-12">
@@ -10,7 +11,7 @@
                                 <h4><a href="{{route('team.search')}}">Search</a> > Team Edit</h4></div>
                             <div class="panel-body">
                                 <form action="{{route('team.edit_confirm', ['id'=>$team->id])}}" method="post"
-                                       enctype="multipart/form-data">
+                                      enctype="multipart/form-data">
                                     @csrf
                                     <div class="form-horizontal" style="border: 1px solid black; padding:50px 100px 100px;">
                                         <div class="row" style="margin-top:15px;">
@@ -18,16 +19,13 @@
                                             <div class="col-md-5">
                                                 <span>{{$team->id}}</span>
                                             </div>
-
                                         </div>
                                         <div class="row" style="margin-top:15px;">
                                             <div class="col-md-2">Name *</div>
                                             <div class="col-md-5">
                                                 <input type="text" class="form-control email" name="name"
-                                                       value="{{session()->has('old_value') ? session('old_value')['name'] : (isset($team->name) ? $team->name : "")}}">
-                                                @error('name')
-                                                <code> {{ $message }} </code>
-                                                @enderror
+                                                       value="{{getDataEditForm($team, 'team_editConfirm', 'name')}}">
+                                                @include('elements.message_error', ['value' => 'name'])
                                             </div>
                                         </div>
                                     </div>

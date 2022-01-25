@@ -8,11 +8,11 @@ use App\Http\Requests\Employee\EditRequest;
 use App\Repositories\Employee\EmployeeRepositoryInterface;
 use App\Repositories\Team\TeamRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Arr;
 
-class EmployeeController extends Controller
+class EmployeeController extends BaseController
 {
     protected $employeeRepo;
     protected $teamRepo;
@@ -26,6 +26,8 @@ class EmployeeController extends Controller
      */
     public function __construct(EmployeeRepositoryInterface $employeeRepo, TeamRepositoryInterface $teamRepo, SendEmailController $sendEmail)
     {
+        parent::__construct();
+        $this->setSession('employee');
         $this->employeeRepo = $employeeRepo;
         $this->teamRepo = $teamRepo;
         $this->sendEmail = $sendEmail;
@@ -33,91 +35,117 @@ class EmployeeController extends Controller
 
     public function show()
     {
-        $teams = $this->teamRepo->getAll();
-        $data = $this->employeeRepo->search();
+        try {
+            $teams = $this->teamRepo->getAll();
+            $data = $this->employeeRepo->search();
 
-        session()->put('exportCSV', $data);
-        return view('employees.search', ['data' => $data, 'teams' => $teams]);
+            $this->setFormData($data);
+            $this->getFormData();
+            return view('employees.search', ['data' => $data, 'teams' => $teams]);
+
+        } catch(\Exception $e){
+            return abort(500);
+        }
     }
 
     public function create()
     {
-        if (!session()->has('token')) {
-            session()->forget(['url_img', 'tmp_url']);
-        }
+        try {
+            if (!session()->has('token')) {
+                session()->forget(['url_img', 'tmp_url', 'employee_createConfirm']);
+            }
 
-        $teams = $this->teamRepo->getAll();
-        return view('employees.create', ['teams' => $teams]);
+            $teams = $this->teamRepo->getAll();
+            return view('employees.create', ['teams' => $teams]);
+
+        } catch(\Exception $e){
+            return abort(500);
+        }
     }
 
     public function createConfirm(CreateRequest $request)
     {
-        $data = session('data_confirm');
-        $teams = $this->teamRepo->getAll();
+        try {
+            $data = array_merge(request()->all(), session('img_avatar'));
 
-        Session::flash('employee_create', $data);
-        return view('employees.create_confirm', ['data' => $data, 'teams' => $teams]);
+            $this->setFormData($data);
+            $this->getFormData(true);
+
+            $teams = $this->teamRepo->getAll();
+            return view('employees.create_confirm', ['data' => $data, 'teams' => $teams]);
+
+        } catch(\Exception $e){
+            return abort(500);
+        }
     }
 
     public function store()
     {
-        $data = session('employee_store');
+        $data = Arr::except($this->getFormData(), ['src_img', '_token', 'tmp_url', 'password_confirm']);
         $result = $this->employeeRepo->create($data);
-        $id = $result->id;
 
         if ($result) {
+            $id = $result->id;
             Storage::move(config('const.TEMP_DIR') . $data['avatar'], config('const.PATH_UPLOAD') . $id . '/' . $data['avatar']);
             Storage::deleteDirectory(config('const.TEMP_DIR'), config('const.PATH_UPLOAD'));
 
             $this->sendEmail->send($result);
-            return redirect()->route('employee.search')->with('success', trans('messages.create_success'));
-        } else {
-            return view('elements.error');
         }
+        return redirect()->route('employee.search');
     }
 
     public function edit($id)
     {
-        if (!session()->has('token')) {
-            session()->forget(['img_avatar', 'tmp_url', 'data_confirm_edit']);
+        try {
+            if (!session()->has('token')) {
+                session()->forget(['img_avatar', 'tmp_url', 'employee_editConfirm']);
+            }
+
+            $teams = $this->teamRepo->getAll();
+            $this->setFormData($this->employeeRepo->find($id));
+            $employee = $this->getFormData();
+            return view('employees.edit', ['employee' => $employee, 'teams' => $teams]);
+
+        } catch(\Exception $e){
+            return abort(500);
         }
-
-        $teams = $this->teamRepo->getAll();
-        session()->put('old_data', $this->employeeRepo->find($id));
-
-        return view('employees.edit', ['employee' => session('old_data'), 'teams' => $teams]);
     }
 
     public function editConfirm(EditRequest $request, $id)
     {
-        $data = session('data_confirm_edit');
-        Session::flash('employee_edit', $data);
+        try {
+            $data = array_merge(request()->all(), session('img_avatar'));
 
-        $teams = $this->teamRepo->getAll();
-        return view('employees.edit_confirm', ['data' => $data, 'id' => $id, 'teams' => $teams]);
+            $this->setFormData($data);
+            $this->getFormData(true);
+
+            $teams = $this->teamRepo->getAll();
+            return view('employees.edit_confirm', ['data' => $data, 'id' => $id, 'teams' => $teams]);
+
+        } catch(\Exception $e){
+            return abort(500);
+        }
     }
 
     public function update($id)
     {
-        $data = session('data_confirm_edit');
-        $result = $this->employeeRepo->update($id, $data);
-
-        if ($result) {
-            if (session()->has('tmp_url')) {
-                Storage::deleteDirectory(config('const.PATH_UPLOAD') . $id);
-                Storage::move(config('const.TEMP_DIR') . $data['avatar'], config('const.PATH_UPLOAD') . $id . '/' . $data['avatar']);
-                Storage::deleteDirectory(config('const.TEMP_DIR'), config('const.PATH_UPLOAD'));
-            }
-
-            if (session('old_data')->email != $data['email']) {
-                $dataSendEmail = $this->employeeRepo->find($id);
-                $this->sendEmail->send($dataSendEmail);
-            }
-
-            return redirect()->route('employee.search')->with('success', trans('messages.update_success'));
-        } else {
-            return view('elements.error');
+        $data = Arr::except(session('employee_editConfirm'), ['src_img', '_token', 'tmp_url', 'password_confirm']);
+        if(empty(data_get($data, 'password'))){
+            $data = Arr::except($data, ['password']);
         }
+        $this->employeeRepo->update($id, $data);
+
+        if (session()->has('tmp_url')) {
+            Storage::deleteDirectory(config('const.PATH_UPLOAD') . $id);
+            Storage::move(config('const.TEMP_DIR') . $data['avatar'], config('const.PATH_UPLOAD') . $id . '/' . $data['avatar']);
+            Storage::deleteDirectory(config('const.TEMP_DIR'), config('const.PATH_UPLOAD'));
+        }
+
+        if (session('employee_edit')->email != $data['email']) {
+            $dataSendEmail = $this->employeeRepo->find($id);
+            $this->sendEmail->send($dataSendEmail);
+        }
+        return redirect()->route('employee.search');
     }
 
     public function destroy($id)
@@ -133,7 +161,7 @@ class EmployeeController extends Controller
 
             return redirect()->route('employee.search')->with('success', trans('messages.delete_success'));
         } else {
-            return view('elements.error');
+            return abort(500);
         }
     }
 
@@ -144,15 +172,21 @@ class EmployeeController extends Controller
 
     public function export()
     {
-        foreach (session('exportCSV') as $key => $employee) {
-            $employees[$key] = [
-                'id' => $employee->id,
-                'team' => $employee->team->name,
-                'name' => $employee->name,
-                'email' => $employee->email,
-            ];
+        try {
+            foreach (session('employee_show') as $key => $employee) {
+                $employees[$key] = [
+                    'id' => $employee->id,
+                    'team' => $employee->team->name,
+                    'name' => $employee->name,
+                    'email' => $employee->email,
+                ];
+            }
+
+            return Excel::download(new EmployeesExport($employees), 'fileEmployee.csv');
+
+        } catch(\Exception $e){
+            return view('elements.error');
         }
 
-        return Excel::download(new EmployeesExport($employees), 'fileEmployee.csv');
     }
 }

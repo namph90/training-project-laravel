@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\TeamController;
 use Illuminate\Support\Facades\Auth;
@@ -44,7 +44,7 @@ Route::group(['prefix' => 'management', "middleware" => "checklogin"], function 
         Route::get('delete/{id}', [TeamController::class, 'destroy'])->name('team.destroy');
         Route::get('back', [TeamController::class, 'returnBack'])->name('team.return_back');
     });
-
+    //Route::resource('team', 'UserController')->only(['store', 'create']);
     Route::group(['prefix' => 'employee'], function () {
         Route::get('search', [EmployeeController::class, 'show'])->name('employee.search');
         Route::get('create', [EmployeeController::class, 'create'])->name('employee.create');

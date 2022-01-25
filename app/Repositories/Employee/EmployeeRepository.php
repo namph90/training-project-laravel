@@ -15,13 +15,13 @@ class EmployeeRepository extends BaseRepository implements EmployeeRepositoryInt
     {
         $resul = $this->model->select('id', 'team_id', 'avatar', 'first_name', 'last_name', 'email')->sortable(['id' => 'desc']);
         if (request()->get('name')) {
-            $resul->search_name(request()->get('name'));
+            $resul->where('last_name', 'like', '%' . request()->get('name') . '%');
         }
         if (request()->get('email')) {
-            $resul->search_email(request()->get('email'));
+            $resul->where('email', 'like', '%' . request()->get('email') . '%');
         }
         if (request()->get('team')) {
-            $resul->search_team(request()->get('team'));
+            $resul->where('team_id', '=', request()->get('team'));
         }
         return $resul->paginate(config('const.record_perpage_paging'));
     }
