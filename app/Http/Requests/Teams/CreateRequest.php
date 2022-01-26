@@ -23,17 +23,10 @@ class CreateRequest extends FormRequest
      * @return array
      */
     public function rules()
-    {//unique:teams
+    {
         session()->flash('token', request()->get('_token'));
         return [
             'name' => 'bail|required|max:128',
         ];
     }
-//    public function withValidator($validator)
-//    {
-//        //All rules have passed, convert our spatial reference to multiple formats and merge to the request for persisting.
-//        if ($validator->fails()) {
-//           return back()->with('old', request()->all());
-//        }
-//    }
 }

@@ -165,7 +165,7 @@
                                     <div class="row" style="margin-top:15px;">
                                         <div class="col-md-2"></div>
                                         <div class="col-md-8">
-                                            <a href="{{route('employee.edit', ['id'=> $employee->id])}}">
+                                            <a href="{{route('employee.edit', ['employee'=> $employee->id])}}">
                                                 <input style="float: left;" type="button" value="Reset"
                                                        class="btn btn-danger">
                                             </a>

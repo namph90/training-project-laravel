@@ -52,17 +52,17 @@
         </div>
         <br><br>
         <div class="panel-body">
-            <nav aria-label="Page navigation example">
-                <ul style="float:right;"><a class="btn btn-primary"
-                                             href="{{route('employee.export')}}">
-                        Export CSV
-                    </a><br>
-                </ul>
-                <ul class="pagination justify-content-end">
-                    {{$data->appends(request()->all())->links()}}
-                </ul>
-            </nav>
             @if($data->count() != 0)
+                <nav aria-label="Page navigation example">
+                    <ul style="float:right;"><a class="btn btn-primary"
+                                                href="{{route('employee.export')}}">
+                            Export CSV
+                        </a><br>
+                    </ul>
+                    <ul class="pagination justify-content-end">
+                        {{$data->appends(request()->all())->links()}}
+                    </ul>
+                </nav>
                 <table class="table table-bordered table-hover thead-light" style="text-align: center;">
                     <tr>
                         <th style="width: 50px;">@sortablelink('id')
@@ -88,7 +88,7 @@
                             <td style="text-align: center; vertical-align: middle;">{{$item->name}}</td>
                             <td style="text-align: left; vertical-align: middle;">{{$item->email}}</td>
                             <td style="text-align:center; vertical-align: middle;">
-                                <a href="{{route('employee.edit', ['id'=>$item->id])}}" class="btn btn-outline-info">Edit
+                                <a href="{{route('employee.edit', ['employee'=>$item->id])}}" class="btn btn-outline-info">Edit
                                 </a>&nbsp;&nbsp;&nbsp;
                                 <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog"
                                      aria-labelledby="myModalLabel" aria-hidden="true">

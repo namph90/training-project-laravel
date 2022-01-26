@@ -32,7 +32,7 @@
                                     <div class="row" style="margin-top:15px;">
                                         <div class="col-md-2"></div>
                                         <div class="col-md-8">
-                                            <a href="{{route('team.edit', ['id'=>$team->id])}}"><input style="float: left;" type="button" value="Reset" class="btn btn-danger"></a>
+                                            <a href="{{route('team.edit', ['team'=>$team->id])}}"><input style="float: left;" type="button" value="Reset" class="btn btn-danger"></a>
                                             <input style="float: right;" type="submit" value="Confirm" class="btn btn-primary">
                                         </div>
                                     </div>

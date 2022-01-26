@@ -36,7 +36,7 @@ class TeamController extends BaseController
     public function create()
     {
         try {
-            if (!session()->has('team_returnBack')) {
+            if (session()->has('team_returnBack')) {
                 session()->forget('team_createConfirm');
             }
             return view('teams.create');
@@ -96,7 +96,7 @@ class TeamController extends BaseController
 
     public function update($id)
     {
-        $data = request()->except('_token');
+        $data = request()->except('_token', '_method');
         $this->teamRepo->update($id, $data);
         return redirect()->route('team.search');
     }

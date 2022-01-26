@@ -54,7 +54,7 @@
                             <td style="vertical-align: middle;">{{$item->id}}</td>
                             <td style="text-align: left; vertical-align: middle;">{{$item->name}}</td>
                             <td style="text-align:center; vertical-align: middle;">
-                                <a href="{{route('team.edit', ['id'=>$item->id])}}" class="btn btn-outline-info">
+                                <a href="{{route('team.edit', ['team'=>$item->id])}}" class="btn btn-outline-info">
                                     Edit
                                 </a>&nbsp;&nbsp;&nbsp;
                                 <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog"
@@ -78,7 +78,7 @@
                                     </div>
                                 </div>
                                 <button class="btn btn-outline-danger"
-                                        data-href="{{route('team.destroy', ['id'=>$item->id])}}" data-toggle="modal"
+                                        data-href="{{route('team.destroy', ['team'=>$item->id])}}" data-toggle="modal"
                                         data-target="#confirm-delete">
                                     Delete
                                 </button>

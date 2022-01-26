@@ -19,6 +19,14 @@ class EditRequest extends FormRequest
         return true;
     }
 
+    public function messages()
+    {
+        return [
+
+            'birthday.before' => 'The Employee must be 18 years old or above.',
+        ];
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -32,10 +40,10 @@ class EditRequest extends FormRequest
             'first_name' => 'bail|required|max:128',
             'last_name' => 'bail|required|max:128',
             'email' => 'bail|required|email|max:128',
-            'birthday' => 'bail|required|before_or_equal:now|max:128',
+            'birthday' => 'bail|required|before:-18 years||max:128',
             'avatar' => 'bail|image|mimes:jpeg,png,jpg,gif,svg|max:2097152|min:2',
             'address' => 'bail|required|max:256',
-            'salary' => 'bail|required|Numeric',
+            'salary' => 'bail|required|Numeric|digits_between:1,11',
             'gerder' => 'bail|required',
             'status' => 'bail|required',
         ];
@@ -45,7 +53,10 @@ class EditRequest extends FormRequest
             session()->put('img_avatar', $data);
 
         } elseif (request()->get('tmp_url') == "") {
-            $data = ['src_img' => 'storage/uploads/' . session('employee_edit')->id . '/' . session('employee_edit')->avatar, 'avatar' => session('employee_edit')->avatar];
+            $data = [
+                'src_img' => 'storage/uploads/' . session('employee_edit')->id . '/' . session('employee_edit')->avatar,
+                'avatar' => session('employee_edit')->avatar
+            ];
             session()->put('img_avatar', $data);
         }
 

@@ -3,7 +3,7 @@
 namespace App\Http\Requests\Employee;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Factory as ValidationFactory;
 
 class CreateRequest extends FormRequest
 {
@@ -20,23 +20,30 @@ class CreateRequest extends FormRequest
 
     protected $redirectRoute = 'employee.create';
 
+    public function messages()
+    {
+        return [
+
+            'birthday.before' => 'The Employee must be 18 years old or above.',
+        ];
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
      * @return array
      */
     public function rules()
-    {
-        //$data = array();
+    {//|before_or_equal:now
         $rules = [
             'first_name' => 'bail|required|max:128',
             'last_name' => 'bail|required|max:128',
             'email' => 'bail|required|email|max:128|unique:employees',
             'password' => 'required|max:64',
             'password_confirm' => 'same:password',
-            'birthday' => 'bail|required|before_or_equal:now|max:128',
+            'birthday' => 'bail|required|before:-18 years|max:128',
             'address' => 'bail|required|max:256',
-            'salary' => 'bail|required|Numeric',
+            'salary' => 'bail|required|Numeric|digits_between:1,11',
             'gerder' => 'bail|required',
             'status' => 'bail|required',
         ];

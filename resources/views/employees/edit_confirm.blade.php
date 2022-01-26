@@ -10,8 +10,9 @@
                                 <h4><a href="{{route('employee.search')}}">Search</a> > Employee - Edit Confirm</h4>
                             </div>
                             <div class="panel-body">
-                                <form action="{{route('employee.update', ['id' => $id])}}" method="post"
+                                <form action="{{route('employee.update', ['employee' => $id])}}" method="post"
                                       enctype="multipart/form-data">
+                                    @method('PUT')
                                     @csrf
                                     <div class="form-horizontal"
                                          style="border: 1px solid black; padding:50px 100px 100px;">
@@ -116,7 +117,7 @@
                                     <div class="row" style="margin-top:15px;">
                                         <div class="col-md-2"></div>
                                         <div class="col-md-8">
-                                            <a href="{{route('employee.edit', ['id' =>$id])}}">
+                                            <a href="{{route('employee.edit', ['employee' =>$id])}}">
                                                 <input
                                                     style="float: left;"
                                                     type="button" value="Back"

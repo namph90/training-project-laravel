@@ -20,6 +20,6 @@ class TeamRepository extends BaseRepository implements TeamRepositoryInterface
             $resul->where('name', 'like', '%' . request()->get('searchName') . '%');
         }
 
-        return $resul->paginate(3);
+        return $resul->paginate(config('const.record_perpage_paging'));
     }
 }
