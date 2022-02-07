@@ -8,10 +8,11 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Kyslik\ColumnSortable\Sortable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\Presenters\EmployeePresenter;
 
 class Employee extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, Sortable;
+    use HasApiTokens, HasFactory, Notifiable, Sortable, EmployeePresenter;
 
     //protected $table = 'employees';
     /**
@@ -57,11 +58,6 @@ class Employee extends Authenticatable
         'password',
         'remember_token',
     ];
-
-    public function getNameAttribute()
-    {
-        return "{$this->first_name} {$this->last_name}";
-    }
 
     public function setPasswordAttribute($password)
     {

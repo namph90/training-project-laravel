@@ -85,7 +85,7 @@
                                      src="{{asset('storage/uploads/'.$item->id.'/'.$item->avatar)}}" alt="">
                             </td>
                             <td style="text-align: center; vertical-align: middle;">{{$item->team->name}}</td>
-                            <td style="text-align: center; vertical-align: middle;">{{$item->name}}</td>
+                            <td style="text-align: center; vertical-align: middle;">{{$item->full_name}}</td>
                             <td style="text-align: left; vertical-align: middle;">{{$item->email}}</td>
                             <td style="text-align:center; vertical-align: middle;">
                                 <a href="{{route('employee.edit', ['employee'=>$item->id])}}" class="btn btn-outline-info">Edit

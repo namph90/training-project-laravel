@@ -23,28 +23,16 @@ class TeamController extends BaseController
 
     public function show()
     {
-        try {
-            $data = $this->teamRepo->search();
-            return view('teams.search', ['data' => $data]);
-
-        } catch(\Exception $e){
-            return abort(500);
-        }
-
+        $data = $this->teamRepo->search();
+        return view('teams.search', ['data' => $data]);
     }
 
     public function create()
     {
-        try {
-            if (session()->has('team_returnBack')) {
-                session()->forget('team_createConfirm');
-            }
-            return view('teams.create');
-
-        } catch(\Exception $e){
-            return abort(500);
+        if (session()->has('team_returnBack')) {
+            session()->forget('team_createConfirm');
         }
-
+        return view('teams.create');
     }
 
     public function createConfirm(CreateRequest $request)
@@ -56,7 +44,7 @@ class TeamController extends BaseController
 
             return view('teams.create_confirm', ['data' => $data]);
 
-        } catch(\Exception $e){
+        } catch (\Exception $e) {
             return abort(500);
         }
 
@@ -64,21 +52,22 @@ class TeamController extends BaseController
 
     public function store()
     {
-        $data = request()->except('_token');
-        $this->teamRepo->create($data);
+        try {
+            $data = request()->all();
+            $this->teamRepo->create($data);
+            session()->flash('success', __('messages.create_success'));
+
+        } catch(\Exception $e){
+            session()->flash('error', __('messages.create_fail'));
+        }
         return redirect()->route('team.search');
+
     }
 
     public function edit($id)
     {
-        try {
             $team = $this->teamRepo->find($id);
             return view('teams.edit', ['team' => $team]);
-
-        } catch(\Exception $e){
-            return abort(500);
-        }
-
     }
 
     public function editConfirm(CreateRequest $request, $id)
@@ -89,31 +78,39 @@ class TeamController extends BaseController
             $this->getFormData(true);
             return view('teams.edit_confirm', ['data' => $data, 'id' => $id]);
 
-        } catch(\Exception $e){
+        } catch (\Exception $e) {
             return abort(500);
         }
     }
 
     public function update($id)
     {
-        $data = request()->except('_token', '_method');
-        $this->teamRepo->update($id, $data);
+        try {
+            $data = request()->all();
+            $this->teamRepo->update($id, $data);
+            session()->flash('success', __('messages.update_success'));
+
+        } catch(\Exception $e){
+            session()->flash('error', __('messages.update_fail'));
+        }
         return redirect()->route('team.search');
     }
 
     public function destroy($id)
     {
-        $team = $this->teamRepo->find($id);
+        try {
+            $team = $this->teamRepo->find($id);
 
-        if ($team->employees->count() == 0) {
-            $this->teamRepo->delete($id);
-            Session::flash('success', __('messages.delete_success'));
+            if ($team->employees->count() == 0) {
+                $this->teamRepo->delete($id);
+                Session::flash('success', __('messages.delete_success'));
 
-        } else {
-            Session::flash('error', __('messages.delete_fail'));
-
+            } else {
+                Session::flash('error', __('messages.delete_employee_fail'));
+            }
+        } catch(\Exception $e){
+            session()->flash('error', __('messages.delete_fail'));
         }
-
         return redirect()->route('team.search');
     }
 

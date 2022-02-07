@@ -25,7 +25,7 @@
                         <div class="col-md-2"></div>
                         <div class="col-md-8">
                             </br></br>
-                            <a href=""><input style="float: left;" type="button" value="Reset"
+                            <a href="{{route('team.search')}}"><input style="float: left;" type="button" value="Reset"
                                               class="btn btn-danger"></a>
                             <input style="float: right;" type="submit" value="Search" class="btn btn-primary">
                         </div>

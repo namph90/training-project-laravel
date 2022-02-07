@@ -3,7 +3,6 @@
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\TeamController;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,20 +16,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 //
-Route::get('/', function () {
-    return redirect()->route('login');
-});
-Route::get('login', function () {
-    if (Auth::check()) {
-        return redirect()->route('home');
-    } else {
-        return view("login");
-    }
-});
-Route::post('login', [AuthController::class, 'login'])->name('login');
+Route::get('/', [AuthController::class, 'login']);
+Route::post('login', [AuthController::class, 'checkLogin'])->name('login');
+Route::get('login', [AuthController::class, 'login']);
 Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::group(['prefix' => 'management', "middleware" => "checklogin"], function () {
+Route::group(['prefix' => 'management', "middleware" => ["checklogin", "checkAccount"]], function () {
     Route::get('home', [EmployeeController::class, 'home'])->name('home');
 
     Route::group(['prefix' => 'team'], function () {

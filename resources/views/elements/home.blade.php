@@ -50,6 +50,7 @@
     </div>
 </footer>
 </html>
+@stack('scripts')
 <style>.dropdown:hover > .dropdown-menu {
         display: block;
     }

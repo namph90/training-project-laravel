@@ -3,6 +3,7 @@
 namespace App\Repositories\Employee;
 
 use App\Repositories\BaseRepository;
+use Illuminate\Support\Facades\DB;
 
 class EmployeeRepository extends BaseRepository implements EmployeeRepositoryInterface
 {
@@ -15,7 +16,7 @@ class EmployeeRepository extends BaseRepository implements EmployeeRepositoryInt
     {
         $resul = $this->model->select('id', 'team_id', 'avatar', 'first_name', 'last_name', 'email')->sortable(['id' => 'desc']);
         if (request()->get('name')) {
-            $resul->where('last_name', 'like', '%' . request()->get('name') . '%');
+            $resul->orWhere(DB::raw('CONCAT(first_name," ",last_name)'), 'LIKE', '%' . request()->get('name') . '%');
         }
         if (request()->get('email')) {
             $resul->where('email', 'like', '%' . request()->get('email') . '%');
