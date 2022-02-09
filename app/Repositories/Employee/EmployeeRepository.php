@@ -14,7 +14,9 @@ class EmployeeRepository extends BaseRepository implements EmployeeRepositoryInt
 
     public function search()
     {
-        $resul = $this->model->select('id', 'team_id', 'avatar', 'first_name', 'last_name', 'email')->sortable(['id' => 'desc']);
+        $resul = $this->model
+            ->select('id', 'team_id', 'avatar', 'first_name', 'last_name', 'email')
+            ->sortable(['id' => 'desc']);
         if (request()->get('name')) {
             $resul->orWhere(DB::raw('CONCAT(first_name," ",last_name)'), 'LIKE', '%' . request()->get('name') . '%');
         }

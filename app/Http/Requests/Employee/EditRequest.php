@@ -19,13 +19,13 @@ class EditRequest extends FormRequest
         return true;
     }
 
-    public function messages()
-    {
-        return [
-
-            'birthday.before' => 'The Employee must be 18 years old or above.',
-        ];
-    }
+//    public function messages()
+//    {
+//        return [
+//
+//            'birthday.before' => 'The Employee must be 18 years old or above.',
+//        ];
+//    }
 
     /**
      * Get the validation rules that apply to the request.

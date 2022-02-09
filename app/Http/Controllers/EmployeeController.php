@@ -8,9 +8,10 @@ use App\Http\Requests\Employee\EditRequest;
 use App\Repositories\Employee\EmployeeRepositoryInterface;
 use App\Repositories\Team\TeamRepositoryInterface;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class EmployeeController extends BaseController
 {
@@ -55,18 +56,13 @@ class EmployeeController extends BaseController
 
     public function createConfirm(CreateRequest $request)
     {
-        try {
-            $data = array_merge(request()->all(), session('img_avatar'));
+        $data = array_merge(request()->all(), session('img_avatar'));
 
-            $this->setFormData($data);
-            $this->getFormData(true);
+        $this->setFormData($data);
+        $this->getFormData(true);
 
-            $teams = $this->teamRepo->getAll();
-            return view('employees.create_confirm', ['data' => $data, 'teams' => $teams]);
-
-        } catch (\Exception $e) {
-            return abort(500);
-        }
+        $teams = $this->teamRepo->getAll();
+        return view('employees.create_confirm', ['data' => $data, 'teams' => $teams]);
     }
 
     public function store()
@@ -83,7 +79,8 @@ class EmployeeController extends BaseController
             }
             session()->flash('success', __('messages.create_success'));
 
-        } catch(\Exception $e){
+        } catch (\Exception $e) {
+            Log::info('Employee Store Error ', ['ins_id' => Auth::id()]);
             session()->flash('error', __('messages.create_fail'));
         }
         return redirect()->route('employee.search');
@@ -103,18 +100,13 @@ class EmployeeController extends BaseController
 
     public function editConfirm(EditRequest $request, $id)
     {
-        try {
-            $data = array_merge(request()->all(), session('img_avatar'));
+        $data = array_merge(request()->all(), session('img_avatar'));
 
-            $this->setFormData($data);
-            $this->getFormData(true);
+        $this->setFormData($data);
+        $this->getFormData(true);
 
-            $teams = $this->teamRepo->getAll();
-            return view('employees.edit_confirm', ['data' => $data, 'id' => $id, 'teams' => $teams]);
-
-        } catch (\Exception $e) {
-            return abort(500);
-        }
+        $teams = $this->teamRepo->getAll();
+        return view('employees.edit_confirm', ['data' => $data, 'id' => $id, 'teams' => $teams]);
     }
 
     public function update($id)
@@ -138,7 +130,8 @@ class EmployeeController extends BaseController
             }
             session()->flash('success', __('messages.update_success'));
 
-        } catch(\Exception $e){
+        } catch (\Exception $e) {
+            Log::info('Employee Update Error ', ['ins_id' => Auth::id()]);
             session()->flash('error', __('messages.update_fail'));
         }
         return redirect()->route('employee.search');
@@ -154,7 +147,8 @@ class EmployeeController extends BaseController
 
                 return redirect()->route('employee.search')->with('success', trans('messages.delete_success'));
             }
-        } catch(\Exception $e){
+        } catch (\Exception $e) {
+            Log::info('Employee Delete Error ', ['ins_id' => Auth::id()]);
             session()->flash('error', __('messages.delete_fail'));
         }
         return redirect()->route('employee.search');
@@ -167,21 +161,15 @@ class EmployeeController extends BaseController
 
     public function export()
     {
-        try {
-            foreach (session('employee_show') as $key => $employee) {
-                $employees[$key] = [
-                    'id' => $employee->id,
-                    'team' => $employee->team->name,
-                    'name' => $employee->full_name,
-                    'email' => $employee->email,
-                ];
-            }
-
-            return Excel::download(new EmployeesExport($employees), 'fileEmployee.csv');
-
-        } catch (\Exception $e) {
-            return view('elements.error');
+        foreach (session('employee_show') as $key => $employee) {
+            $employees[$key] = [
+                'id' => $employee->id,
+                'team' => $employee->team->name,
+                'name' => $employee->full_name,
+                'email' => $employee->email,
+            ];
         }
 
+        return Excel::download(new EmployeesExport($employees), 'fileEmployee.csv');
     }
 }

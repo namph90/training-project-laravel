@@ -15,7 +15,7 @@ class SendEmail extends Mailable
     /**
      * Create a new message instance.
      *
-     * @return void
+     * @param $employee
      */
     public function __construct($employee)
     {

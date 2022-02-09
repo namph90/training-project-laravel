@@ -21,7 +21,7 @@
                                                          onchange="loadFile(event)"/></span></br></br>
 
                                                 <img id="output" class="img-rounded image" alt="Ảnh" width="100"
-                                                     src="{{asset(session()->has('url_img')?session('url_img'):(session()->has('employee') ? session('employee')['src_img'] : "")) }}"/>
+                                                     src="{{asset(session()->has('url_img')?session('url_img'):(session()->has('employee') ? session('employee')['src_img'] : config('const.IMG_DEFAULT'))) }}"/>
                                                 <input type="hidden" name="tmp_url"
                                                        value="{{session()->has('tmp_url')?session('tmp_url'):""}}">
                                                 @include('elements.message_error', ['value' => 'avatar'])

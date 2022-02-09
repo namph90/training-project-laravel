@@ -26,4 +26,5 @@ return [
     ],
     'TEMP_DIR' => 'public/tmp/',
     'PATH_UPLOAD' => 'public/uploads/',
+    'IMG_DEFAULT' => 'storage/uploads/no-image-news.png',
 ];

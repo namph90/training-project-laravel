@@ -14,20 +14,23 @@
 <nav class="bg-light navbar-right" style="height: 60px; line-height: 35px;">
     <ul class="nav justify-content-end">
         <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="{{route('home')}}">
+            <a class="nav-link dropdown-toggle {{ (request()->is('*/team/*')) ? 'active' : ''}}"
+               href="{{route('home')}}">
                 Team management
             </a>
-            <div class="dropdown-menu">
+            <div class="dropdown-menu" id="main-menu">
                 <a class="dropdown-item" href="{{route('team.search')}}">Search</a>
                 <a class="dropdown-item" href="{{route('team.create')}}">Create</a>
             </div>
         </li>
         <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="{{route('home')}}">
+            <a class="nav-link dropdown-toggle {{ (request()->is('*/employee/*')) ? 'active' : ''}}"
+               href="{{route('home')}}">
                 Employee management
             </a>
-            <div class="dropdown-menu">
-                <a class="dropdown-item" href="{{route('employee.search')}}">Search</a>
+            <div class="dropdown-menu" id="main-menu">
+                <a class="dropdown-item"
+                   href="{{route('employee.search')}}">Search</a>
                 <a class="dropdown-item" href="{{route('employee.create')}}">Create</a>
             </div>
         </li>
@@ -38,7 +41,12 @@
     </ul>
 </nav>
 <br>
-
+<style>
+    .active {
+        color: #008bff !important;
+        font-weight: 700;
+    }
+</style>
 <div class="container" style="margin-top: 50px;">
     @yield('content')
 </div>

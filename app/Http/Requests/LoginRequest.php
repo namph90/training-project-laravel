@@ -35,14 +35,14 @@ class LoginRequest extends FormRequest
         return true;
     }
 
-    public function messages()
-    {
-        return [
-
-            'password.required' => 'The email and password field is required.',
-            'email.required' => 'The email and password field is required.',
-        ];
-    }
+//    public function messages()
+//    {
+//        return [
+//
+//            'password.required' => 'The email and password field is required.',
+//            'email.required' => 'The email and password field is required.',
+//        ];
+//    }
 
     /**
      * Get the validation rules that apply to the request.

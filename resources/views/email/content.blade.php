@@ -9,7 +9,7 @@
 </head>
 <body>
 <h1 style="text-align: center;">Chào mừng bạn gia nhập hệ thống!</h1>
-<p>Xin chào {{$employee->name}}!<br>
+<p>Xin chào {{$employee->full_name}}!<br>
     Chúc mừng bạn đã được đăng ký thành công để tham gia hệ thống của chúng tôi.</p>
 </body>
 </html>
