@@ -5,6 +5,7 @@ namespace App\Http;
 use App\Http\Middleware\checkAccount;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 //test
+
 class Kernel extends HttpKernel
 {
     /**
